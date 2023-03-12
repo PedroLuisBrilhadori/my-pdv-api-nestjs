@@ -1,7 +1,8 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto, LoginUserDto } from './dto/user.dto';
+import { CreateUserDto } from './dto/user.dto';
 import { compare, hash } from 'bcrypt';
+import { JwtAuthGuard } from '../Auth/guards/jwt-auth.guard';
 
 export type Bcrypt = {
     hash: typeof hash;
@@ -10,16 +11,13 @@ export type Bcrypt = {
 
 @Controller('user')
 export class UserController {
-    constructor(
-        private service: UserService,
-        @Inject('BCRYPT') private bcrypt: Bcrypt,
-    ) {}
+    constructor(private userService: UserService) {}
 
-    @Post('register')
+    @Post('create')
+    @UseGuards(JwtAuthGuard)
     async register(@Body() createUser: CreateUserDto) {
-        const user = await this.service.register({
+        const user = await this.userService.create({
             ...createUser,
-            password: await this.bcrypt.hash(createUser.password, 10),
         });
 
         return {
@@ -30,7 +28,4 @@ export class UserController {
             },
         };
     }
-
-    @Post('login')
-    async login(@Body() user: LoginUserDto) {}
 }

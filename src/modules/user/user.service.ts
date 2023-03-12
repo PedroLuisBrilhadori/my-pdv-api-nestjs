@@ -8,15 +8,15 @@ import { CreateUserDto, LoginUserDto } from './dto/user.dto';
 export class UserService {
     constructor(@InjectRepository(User) private repository: Repository<User>) {}
 
-    async register(createUser: CreateUserDto): Promise<User> {
+    async findOne(email: string): Promise<User> {
+        return await this.repository.findOne({ where: { email } });
+    }
+
+    async create(createUser: CreateUserDto): Promise<User> {
         const user = this.repository.create(createUser);
 
         await this.repository.save(user);
 
         return user;
-    }
-
-    async login(loginUser: LoginUserDto): Promise<User> {
-        return new User();
     }
 }
