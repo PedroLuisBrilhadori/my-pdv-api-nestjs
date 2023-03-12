@@ -1,13 +1,7 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards, Param } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/user.dto';
-import { compare, hash } from 'bcrypt';
 import { JwtAuthGuard } from '../Auth/guards/jwt-auth.guard';
-
-export type Bcrypt = {
-    hash: typeof hash;
-    compare: typeof compare;
-};
 
 @Controller('user')
 export class UserController {
@@ -27,5 +21,12 @@ export class UserController {
                 password: undefined,
             },
         };
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('/:email')
+    async getUser(@Param() { email }) {
+        const { password, ...user } = await this.userService.findOne(email);
+        return user;
     }
 }
