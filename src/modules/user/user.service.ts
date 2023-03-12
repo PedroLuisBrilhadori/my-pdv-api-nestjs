@@ -23,13 +23,15 @@ export class UserService {
     ) {}
 
     async findOne(email: string): Promise<User> {
-        return await this.repository.findOne({ where: { email } });
+        const user = await this.repository.findOne({ where: { email } });
+
+        if (!user) throw new NotFoundException('Usuário não encontrado.');
+
+        return user;
     }
 
     async findPassword(email: string, password: string) {
         const user = await this.findOne(email);
-
-        if (!user) throw new NotFoundException('Usuário não encontrado.');
 
         if (!this.bcrypt.compare(password, user.password)) {
             throw new UnauthorizedException();
