@@ -17,7 +17,7 @@ import { PdvModule } from './modules/pdv.module';
             database: process.env.BD_DATABASE,
             synchronize: true,
             autoLoadEntities: true,
-            logging: true,
+            logging: false,
             extra: {
                 trustServerCertificate: true,
             },
