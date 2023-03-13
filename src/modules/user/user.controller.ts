@@ -10,23 +10,21 @@ export class UserController {
     @Post('create')
     @UseGuards(JwtAuthGuard)
     async register(@Body() createUser: CreateUserDto) {
-        const user = await this.userService.create({
+        const {
+            user: { password, ...user },
+        } = await this.userService.create({
             ...createUser,
         });
 
-        return {
-            success: true,
-            user: {
-                ...user,
-                password: undefined,
-            },
-        };
+        return user;
     }
 
     @UseGuards(JwtAuthGuard)
     @Get('/:email')
     async getUser(@Param() { email }) {
-        const { password, ...user } = await this.userService.findOne(email);
+        const {
+            user: { password, ...user },
+        } = await this.userService.findOne(email);
         return user;
     }
 }
