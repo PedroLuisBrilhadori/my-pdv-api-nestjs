@@ -22,16 +22,16 @@ export class UserService {
         @Inject('BCRYPT') private bcrypt: Bcrypt,
     ) {}
 
-    async findOne(email: string): Promise<User> {
+    async findOne(email: string) {
         const user = await this.repository.findOne({ where: { email } });
 
         if (!user) throw new NotFoundException('Usuário não encontrado.');
 
-        return user;
+        return { user };
     }
 
     async findPassword(email: string, password: string) {
-        const user = await this.findOne(email);
+        const { user } = await this.findOne(email);
 
         if (!this.bcrypt.compare(password, user.password)) {
             throw new UnauthorizedException();
@@ -40,13 +40,13 @@ export class UserService {
         return user;
     }
 
-    async create(createUser: CreateUserDto): Promise<User> {
+    async create(createUser: CreateUserDto) {
         const user = this.repository.create(createUser);
 
         user.password = await this.bcrypt.hash(user.password, 10);
 
         await this.repository.save(user);
 
-        return user;
+        return { user };
     }
 }

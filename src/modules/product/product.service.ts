@@ -27,7 +27,7 @@ export class ProductService {
 
         const product = this.repository.create(createProduct);
         await this.repository.save(product);
-        return product;
+        return { product };
     }
 
     async findOne(name: string) {
@@ -35,15 +35,17 @@ export class ProductService {
 
         if (!product) throw new NotFoundException('Produto não encontrado.');
 
-        return product;
+        return { product };
     }
 
     async find(name?: string) {
-        return await this.repository.find({ where: { name } });
+        const products = await this.repository.find({ where: { name } });
+
+        return { products };
     }
 
     async delete(name: string) {
-        const product = await this.findOne(name);
+        const { product } = await this.findOne(name);
         const { affected } = await this.repository.delete(product);
 
         if (!affected) {
@@ -53,6 +55,6 @@ export class ProductService {
             );
         }
 
-        return product;
+        return { product };
     }
 }
