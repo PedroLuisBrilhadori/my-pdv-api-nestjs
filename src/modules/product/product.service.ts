@@ -16,6 +16,15 @@ export class ProductService {
     ) {}
 
     async create(createProduct: CreateProductDto) {
+        const isExists = await this.repository.findOne({
+            where: { name: createProduct.name },
+        });
+
+        if (isExists) {
+            const message = 'O Produto já existe.';
+            throw new HttpException(message, HttpStatus.CONFLICT);
+        }
+
         const product = this.repository.create(createProduct);
         await this.repository.save(product);
         return product;
