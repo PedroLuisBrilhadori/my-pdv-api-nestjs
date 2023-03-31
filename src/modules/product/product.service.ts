@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './model/product.model';
 import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/product.dto';
+import { FindOptions } from 'src/utils/types';
 
 @Injectable()
 export class ProductService {
@@ -38,10 +39,14 @@ export class ProductService {
         return { product };
     }
 
-    async find(name?: string) {
-        const products = await this.repository.find({ where: { name } });
+    async find({ order, page, max }: FindOptions) {
+        const [data, total] = await this.repository.findAndCount({
+            order,
+            skip: (page - 1) * max,
+            take: max,
+        });
 
-        return { products };
+        return { data, total, page };
     }
 
     async delete(name: string) {
