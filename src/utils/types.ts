@@ -1,5 +1,6 @@
 export type FindOptions = {
     page: number;
     max: number;
-    order: { [key: string]: 'asc' | 'desc' };
+    order?: { [key: string]: 'desc' | 'asc' };
+    search?: string;
 };

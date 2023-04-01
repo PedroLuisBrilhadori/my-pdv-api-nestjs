@@ -24,8 +24,8 @@ export class ProductController {
     }
 
     @Get()
-    async getAll(@Query() options: FindOptions) {
-        return this.productService.find(options);
+    async getAll(@Query() { name, price }, @Query() options: FindOptions) {
+        return this.productService.find({ order: { name, price }, ...options });
     }
 
     @Get(':name')

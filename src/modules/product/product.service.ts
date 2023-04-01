@@ -39,12 +39,33 @@ export class ProductService {
         return { product };
     }
 
-    async find({ order, page, max }: FindOptions) {
-        const [data, total] = await this.repository.findAndCount({
-            order,
-            skip: (page - 1) * max,
-            take: max,
-        });
+    async find({ order, page, max, search }: FindOptions) {
+        const skip = (page - 1) * max;
+        const queryBuilder = this.repository.createQueryBuilder('PDV_PRODUCTS');
+
+        if (search) {
+            queryBuilder.where('PDV_PRODUCTS.name LIKE :name', {
+                name: `%${search}%`,
+            });
+        }
+
+        if (order) {
+            const entries = Object.entries(order);
+
+            for (const entrie of entries) {
+                const field = entrie.shift() as string;
+                const order = entrie.shift()?.toUpperCase() as 'ASC' | 'DESC';
+
+                if (!order || !field) continue;
+
+                queryBuilder.orderBy(`PDV_PRODUCTS.${field}`, order);
+            }
+        }
+
+        const [data, total] = await queryBuilder
+            .take(max)
+            .skip(skip)
+            .getManyAndCount();
 
         return { data, total, page };
     }
