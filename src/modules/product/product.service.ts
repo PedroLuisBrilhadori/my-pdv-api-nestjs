@@ -44,9 +44,12 @@ export class ProductService {
         const queryBuilder = this.repository.createQueryBuilder('PDV_PRODUCTS');
 
         if (search) {
-            queryBuilder.where('PDV_PRODUCTS.name LIKE :name', {
-                name: `%${search}%`,
-            });
+            queryBuilder.where(
+                'PDV_PRODUCTS.name COLLATE Latin1_General_CI_AI LIKE :name COLLATE Latin1_General_CI_AI',
+                {
+                    name: `%${search}%`,
+                },
+            );
         }
 
         if (order) {

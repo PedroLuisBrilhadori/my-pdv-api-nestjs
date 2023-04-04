@@ -4,7 +4,7 @@ import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity('PDV_PRODUCTS')
 export class Product {
-    @PrimaryColumn({ unique: true })
+    @PrimaryColumn('nvarchar', { unique: true })
     name: string;
 
     @Column('numeric', { precision: 5, scale: 2 })
