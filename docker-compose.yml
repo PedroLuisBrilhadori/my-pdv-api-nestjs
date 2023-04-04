@@ -1,8 +1,9 @@
 services:
     mssql:
         container_name: mssql
+        working_dir: /usr/src/app
         image: mcr.microsoft.com/mssql/server:2022-latest
-        command: sh -c ' chmod +x /tmp/entrypoint.sh; /tmp/entrypoint.sh & /opt/mssql/bin/sqlservr;'
+        command: sh -c ' chmod +x ./entrypoint.sh; ./entrypoint.sh & /opt/mssql/bin/sqlservr;'
         environment:
             SA_PASSWORD: ${DB_PASSWORD}
             ACCEPT_EULA: 'Y'
@@ -14,8 +15,11 @@ services:
         ports:
             - '1433:1433'
         volumes:
-            - ./volumes/entrypoint.sh:/tmp/entrypoint.sh
-            - ./volumes/create-database.sql:/tmp/create-database.sql
+            - ./volumes/entrypoint.sh:/usr/src/app/entrypoint.sh
+            - ./volumes/populate.sh:/usr/src/app/populate.sh
+            - ./volumes/create-database.sql:/usr/src/app/create-database.sql
+            - ./volumes/populate.sql:/usr/src/app/populate.sql
+
         healthcheck:
             test:
                 [

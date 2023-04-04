@@ -1,0 +1,1 @@
+/opt/mssql-tools/bin/sqlcmd -U $DB_USER -P $DB_PASSWORD < ./populate.sql

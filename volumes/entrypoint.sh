@@ -16,7 +16,7 @@ init_db () {
   INPUT_SQL_FILE="create-database.sql"
 
   # run the init script to create the DB
-  until /opt/mssql-tools/bin/sqlcmd -U $DB_USER -P $DB_PASSWORD -i /tmp/create-database.sql > /dev/null 2>&1
+  until /opt/mssql-tools/bin/sqlcmd -U $DB_USER -P $DB_PASSWORD -i ./create-database.sql > /dev/null 2>&1
   do
     echo -e "\033[31mSQL server is unavailable - sleeping"
 
@@ -28,4 +28,4 @@ init_db () {
 }
 
 # Run init_db and start a SQL Server
-init_db & /opt/mssql/bin/sqlservr
+init_db
