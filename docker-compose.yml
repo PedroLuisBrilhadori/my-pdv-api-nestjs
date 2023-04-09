@@ -1,31 +1,16 @@
 services:
-    mssql:
-        container_name: mssql
+    postgres:
+        container_name: postgres
         working_dir: /usr/src/app
-        image: mcr.microsoft.com/mssql/server:2022-latest
-        command: sh -c ' chmod +x ./entrypoint.sh; ./entrypoint.sh & /opt/mssql/bin/sqlservr;'
+        image: postgres
         environment:
-            SA_PASSWORD: ${DB_PASSWORD}
-            ACCEPT_EULA: 'Y'
-            MSSQL_PID: 'Developer'
             DB_HOST: ${DB_HOST}
             DB_USER: ${DB_USER}
-            DB_PASSWORD: ${DB_PASSWORD}
-            DB_DATABASE: ${DB_DATABASE}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_DB: ${DB_DATABASE}
         ports:
-            - '1433:1433'
+            - '5432:5432'
         volumes:
-            - ./volumes/entrypoint.sh:/usr/src/app/entrypoint.sh
+            - ./volumes/create-database.sql:/docker-entrypoint-initdb.d/create-database.sql
             - ./volumes/populate.sh:/usr/src/app/populate.sh
-            - ./volumes/create-database.sql:/usr/src/app/create-database.sql
             - ./volumes/populate.sql:/usr/src/app/populate.sql
-
-        healthcheck:
-            test:
-                [
-                    'CMD-SHELL',
-                    "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P ${DB_PASSWORD} -Q 'SELECT 1' || exit 1",
-                ]
-            interval: 10s
-            start_period: 10s
-            timeout: 3s
