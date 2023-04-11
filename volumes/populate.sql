@@ -10,48 +10,48 @@ VALUES ('Pedro Luís Brilhadori', 'pedroluisbrilhadori@gmail.com', '$2b$10$.ckTU
 -- products
 
 INSERT INTO "PDV_PRODUCTS" ("name", "price", "unit")
-VALUES ('Banana Prata', 3.9, 0);
+VALUES ('Banana Prata', 3.9, false);
  
 
 INSERT INTO "PDV_PRODUCTS" ("name", "price", "unit")
-VALUES ('Banana Nanica', 5.9, 0);
+VALUES ('Banana Nanica', 5.9, false);
  
 
 INSERT INTO "PDV_PRODUCTS" ("name", "price", "unit")
-VALUES ('Banana Maçã', 7.9, 0);
+VALUES ('Banana Maçã', 7.9, false);
  
 
 INSERT INTO "PDV_PRODUCTS" ("name", "price", "unit")
-VALUES ('Maçã', 8.9, 0);
+VALUES ('Maçã', 8.9, false);
  
 
 INSERT INTO "PDV_PRODUCTS" ("name", "price", "unit")
-VALUES ('Chuchu', 3.9, 0);
+VALUES ('Chuchu', 3.9, false);
 
 INSERT INTO "PDV_PRODUCTS" ("name", "price", "unit")
-VALUES ('Cebola', 4.9, 0);
+VALUES ('Cebola', 4.9, false);
 
 
 INSERT INTO "PDV_PRODUCTS" ("name", "price", "unit")
-VALUES ('Mel pequeno', 10, 1);
+VALUES ('Mel pequeno', 10, true);
  
 
 INSERT INTO "PDV_PRODUCTS" ("name", "price", "unit")
-VALUES ('Mel médio', 20, 1);
+VALUES ('Mel médio', 20, true);
  
 
 INSERT INTO "PDV_PRODUCTS" ("name", "price", "unit")
-VALUES ('Mel grande', 30, 1);
+VALUES ('Mel grande', 30, true);
  
 
 INSERT INTO "PDV_PRODUCTS" ("name", "price", "unit")
-VALUES ('Pipoca', 10, 1);
+VALUES ('Pipoca', 10, true);
  
 
 INSERT INTO "PDV_PRODUCTS" ("name", "price", "unit")
-VALUES ('Laranja', 2.99, 0);
+VALUES ('Laranja', 2.99, false);
  
 
 INSERT INTO "PDV_PRODUCTS" ("name", "price", "unit")
-VALUES ('Pera', 12.99, 0);
+VALUES ('Pera', 12.99, false);
  
