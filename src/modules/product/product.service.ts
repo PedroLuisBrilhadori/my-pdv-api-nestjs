@@ -6,9 +6,10 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './model/product.model';
-import { Repository } from 'typeorm';
+import { QueryBuilder, Repository } from 'typeorm';
 import { CreateProductDto } from './dto/product.dto';
 import { FindOptions } from 'src/utils/types';
+import { hasProperty } from 'src/utils/hasProperty';
 
 @Injectable()
 export class ProductService {
@@ -39,7 +40,7 @@ export class ProductService {
         return { product };
     }
 
-    async find({ order, page, max, search }: FindOptions) {
+    async find({ page, max, search, ...sorts }: FindOptions) {
         const skip = (page - 1) * max;
         const queryBuilder = this.repository.createQueryBuilder('PDV_PRODUCTS');
 
@@ -52,17 +53,24 @@ export class ProductService {
             );
         }
 
-        if (order) {
-            const entries = Object.entries(order);
+        if (sorts) {
+            const entries = Object.entries(sorts);
+            const queryOrder = {};
 
-            for (const entrie of entries) {
-                const field = entrie.shift() as string;
-                const order = entrie.shift()?.toUpperCase() as 'ASC' | 'DESC';
+            for (const sort of entries) {
+                const field = sort.shift() as keyof Product;
+                const order = sort.shift();
+
+                if (order !== 'DESC' && order !== 'ASC') continue;
 
                 if (!order || !field) continue;
 
-                queryBuilder.orderBy(`PDV_PRODUCTS.${field}`, order);
+                if (!hasProperty(Product, field)) continue;
+
+                queryOrder[`PDV_PRODUCTS.${field}`] = order;
             }
+
+            queryBuilder.orderBy(queryOrder);
         }
 
         const [data, total] = await queryBuilder

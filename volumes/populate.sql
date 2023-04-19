@@ -11,7 +11,11 @@ VALUES ('Pedro Luís Brilhadori', 'pedroluisbrilhadori@gmail.com', '$2b$10$.ckTU
 
 INSERT INTO "PDV_PRODUCTS" ("name", "price", "unit")
 VALUES ('Banana Prata', 3.9, false);
- 
+
+
+INSERT INTO "PDV_PRODUCTS" ("name", "price", "unit")
+VALUES ('Alface', 3.9, true);
+
 
 INSERT INTO "PDV_PRODUCTS" ("name", "price", "unit")
 VALUES ('Banana Nanica', 5.9, false);
