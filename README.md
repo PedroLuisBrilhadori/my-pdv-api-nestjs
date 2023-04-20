@@ -39,7 +39,9 @@ $ yarn dev
 
 ## Stay in touch
 
--   Author - [PedroLuisBrilhadori](https://github.com/PedroLuisBrilhadori)
+### Authors: 
+- [PedroLuisBrilhadori](https://github.com/PedroLuisBrilhadori)
+- [Jbnado](https://github.com/jbnado)
 
 ## License
 
