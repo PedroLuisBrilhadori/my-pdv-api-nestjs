@@ -1,30 +1,53 @@
 import { Test } from '@nestjs/testing';
-import { dataSourceMockFactory } from './mocks/datasource.mock';
-import { MockRepository } from './mocks/repository.mock';
+import {
+    MockQueryRunner,
+    dataSourceMockFactory,
+} from './mocks/datasource.mock';
+import { MockQueryBuilder, MockRepository } from './mocks/repository.mock';
 import {
     MockCreateUserDto,
     MockUser,
     MockUserService,
 } from './mocks/user-service.mock';
 import { getDataSourceToken, getRepositoryToken } from '@nestjs/typeorm';
-import { DataSource, DeleteResult, FindOneOptions, Repository } from 'typeorm';
+import {
+    DataSource,
+    DeleteResult,
+    FindOneOptions,
+    QueryBuilder,
+    QueryRunner,
+    Repository,
+    SelectQueryBuilder,
+} from 'typeorm';
 import { TableMetadata } from '../service.abstract';
 import {
+    BadRequestException,
     ConflictException,
     HttpException,
     NotFoundException,
 } from '@nestjs/common';
-import { Criteria } from '../types/types';
+import { Criteria, FindOptions } from '../types/types';
+import { QueryBuilderProvider, QueryRunnerProvider } from '../providers';
 
-const mockuser = {
+const mockuser: MockUser = {
     name: 'Pedro',
     email: 'pedro@example.co',
 };
 
+const mockUsers: MockUser[] = [
+    mockuser,
+    { name: 'Carlos', email: 'carlos@example.co' },
+    { name: 'Eduardo', email: 'eduardo@example.co' },
+    { name: 'Jefferson', email: 'jefferson@example.co' },
+    { name: 'Kyle', email: 'kyle@example.co' },
+    { name: 'Michel', email: 'michel@example.co' },
+];
+
 describe('Abstract Repository', () => {
     let service: MockUserService;
     let repository: Repository<MockUser>;
-    let dataSource: DataSource;
+    let queryRunner: QueryRunner;
+    let queryBuilder: SelectQueryBuilder<MockUser>;
 
     beforeEach(async () => {
         const module = await Test.createTestingModule({
@@ -35,8 +58,12 @@ describe('Abstract Repository', () => {
                     useClass: MockRepository<MockUser>,
                 },
                 {
-                    provide: getDataSourceToken(),
-                    useFactory: dataSourceMockFactory,
+                    provide: QueryBuilder.name,
+                    useClass: MockQueryBuilder,
+                },
+                {
+                    provide: QueryRunnerProvider.name,
+                    useClass: MockQueryRunner,
                 },
                 {
                     provide: TableMetadata.name,
@@ -53,9 +80,10 @@ describe('Abstract Repository', () => {
         repository = module.get<Repository<MockUser>>(
             getRepositoryToken(MockUser),
         );
-        dataSource = module.get<DataSource>(getDataSourceToken());
-
-        jest.clearAllMocks();
+        queryRunner = module.get<QueryRunner>(QueryRunnerProvider.name);
+        queryBuilder = module.get<SelectQueryBuilder<MockUser>>(
+            QueryBuilder.name,
+        );
     });
 
     it('should to be defined', () => {
@@ -150,6 +178,57 @@ describe('Abstract Repository', () => {
 
             expect(async () => await service.delete(criteria)).rejects.toThrow(
                 HttpException,
+            );
+        });
+    });
+
+    describe('find', () => {
+        it('should find all users with pagination and max 5 users', async () => {
+            const findOptions: FindOptions = {
+                page: 1,
+                max: 5,
+            };
+
+            const result = {
+                page: findOptions.page,
+                data: mockUsers.slice(0, 4),
+                total: mockUsers.length,
+            };
+
+            jest.spyOn(queryBuilder, 'getManyAndCount').mockImplementation(
+                async () => [mockUsers.slice(0, 4), mockUsers.length],
+            );
+
+            expect(await service.find(findOptions)).toStrictEqual(result);
+        });
+
+        it('should throw a badRequest when page is not defined', async () => {
+            const findOptions: FindOptions = {
+                page: null,
+                max: 5,
+            };
+
+            jest.spyOn(queryBuilder, 'getManyAndCount').mockImplementation(
+                async () => [mockUsers.slice(0, 4), mockUsers.length],
+            );
+
+            expect(async () => await service.find(findOptions)).rejects.toThrow(
+                BadRequestException,
+            );
+        });
+
+        it('should throw a badRequest when max is not defined', async () => {
+            const findOptions: FindOptions = {
+                page: 1,
+                max: null,
+            };
+
+            jest.spyOn(queryBuilder, 'getManyAndCount').mockImplementation(
+                async () => [mockUsers.slice(0, 4), mockUsers.length],
+            );
+
+            expect(async () => await service.find(findOptions)).rejects.toThrow(
+                BadRequestException,
             );
         });
     });

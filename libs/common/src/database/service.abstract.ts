@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import {
+    BadRequestException,
     ConflictException,
     HttpException,
     HttpStatus,
@@ -63,12 +64,11 @@ export abstract class AbstractService<TEntity> {
     async find({ page, max, search, ...orders }: FindOptions) {
         const skip = (page - 1) * max;
 
-        if (typeof skip !== 'number') {
+        if (typeof page !== 'number' || typeof max !== 'number') {
             const param = typeof page !== 'number' ? 'page' : 'max';
 
-            throw new HttpException(
+            throw new BadRequestException(
                 `the param: ${param} is not defined.`,
-                HttpStatus.BAD_REQUEST,
             );
         }
 
