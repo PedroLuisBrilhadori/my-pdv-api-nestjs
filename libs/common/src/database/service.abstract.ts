@@ -9,7 +9,7 @@ import { DataSource, DeepPartial, FindOneOptions, Repository } from 'typeorm';
 import { Criteria, FindOptions } from './types/types';
 import { SearchableKey } from './decorators/search.decorator';
 
-export abstract class AbstractRepository<TEntity> {
+export abstract class AbstractService<TEntity> {
     name: string;
     tableName: string;
     searchName: string;
