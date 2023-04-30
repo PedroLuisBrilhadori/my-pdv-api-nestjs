@@ -5,7 +5,13 @@ import {
     HttpStatus,
     NotFoundException,
 } from '@nestjs/common';
-import { DataSource, DeepPartial, FindOneOptions, Repository } from 'typeorm';
+import {
+    DeepPartial,
+    FindOneOptions,
+    QueryRunner,
+    Repository,
+    SelectQueryBuilder,
+} from 'typeorm';
 import { Criteria, FindOptions } from './types/types';
 
 export class TableMetadata {
@@ -21,7 +27,8 @@ export abstract class AbstractService<TEntity> {
 
     constructor(
         private repository: Repository<TEntity>,
-        private dataSource: DataSource,
+        private queryBuilder: SelectQueryBuilder<TEntity>,
+        private queryRunner: QueryRunner,
         metadata: TableMetadata,
     ) {
         this.name = metadata.name;
@@ -49,7 +56,6 @@ export abstract class AbstractService<TEntity> {
                 [`${this.name.toLowerCase()}`]: entity,
             };
         } catch (error) {
-            console.error(error);
             throw new ConflictException(`${this.name} already exists.`);
         }
     }
@@ -57,16 +63,17 @@ export abstract class AbstractService<TEntity> {
     async find({ page, max, search, ...orders }: FindOptions) {
         const skip = (page - 1) * max;
 
-        const queryBuilder = this.repository.createQueryBuilder(this.tableName);
+        if (typeof skip !== 'number') {
+            const param = typeof page !== 'number' ? 'page' : 'max';
 
-        if (typeof skip !== 'number')
             throw new HttpException(
-                `skip is not defined.`,
+                `the param: ${param} is not defined.`,
                 HttpStatus.BAD_REQUEST,
             );
+        }
 
         if (search && this.searchName) {
-            queryBuilder.where(
+            this.queryBuilder.where(
                 `LOWER(unaccent(${this.tableName}.${this.searchName})) LIKE LOWER(unaccent(:${this.searchName}))`,
                 {
                     [this.searchName]: `%${search}%`,
@@ -74,11 +81,10 @@ export abstract class AbstractService<TEntity> {
             );
         }
 
-        if (orders) {
-            const entries = Object.entries(orders);
-            const queryOrder = {};
+        const entries = Object.entries(orders);
 
-            const queryRunner = this.dataSource.createQueryRunner();
+        if (entries.length > 0) {
+            const queryOrder = {};
 
             for (const sort of entries) {
                 const field = sort.shift() as keyof TEntity as string;
@@ -88,15 +94,15 @@ export abstract class AbstractService<TEntity> {
 
                 if (order !== 'desc' && order !== 'asc') continue;
 
-                if (await queryRunner.hasColumn(this.tableName, field))
+                if (await this.queryRunner.hasColumn(this.tableName, field))
                     queryOrder[`${this.tableName}.${field}`] =
                         order.toUpperCase();
             }
 
-            queryBuilder.orderBy(queryOrder);
+            this.queryBuilder.orderBy(queryOrder);
         }
 
-        const [data, total] = await queryBuilder
+        const [data, total] = await this.queryBuilder
             .take(max)
             .skip(skip)
             .getManyAndCount();

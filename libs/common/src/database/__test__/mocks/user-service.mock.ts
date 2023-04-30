@@ -1,8 +1,17 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import {
+    Column,
+    Entity,
+    PrimaryColumn,
+    QueryBuilder,
+    QueryRunner,
+    Repository,
+    SelectQueryBuilder,
+} from 'typeorm';
 import { Searchable } from '../../decorators/search.decorator';
 import { AbstractService, TableMetadata } from '../../service.abstract';
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
+import { QueryBuilderProvider, QueryRunnerProvider } from '../../providers';
 
 export class MockCreateUserDto {
     name: string;
@@ -22,10 +31,11 @@ export class MockUser {
 @Injectable()
 export class MockUserService extends AbstractService<MockUser> {
     constructor(
-        @InjectRepository(MockUser) repository,
-        @InjectDataSource() dataSource,
-        @Inject(TableMetadata.name) metadata,
+        @InjectRepository(MockUser) repository: Repository<MockUser>,
+        @Inject(QueryBuilder.name) queryBuilder: SelectQueryBuilder<MockUser>,
+        @Inject(QueryRunnerProvider.name) queryRunner: QueryRunner,
+        @Inject(TableMetadata.name) metadata: TableMetadata,
     ) {
-        super(repository, dataSource, metadata);
+        super(repository, queryBuilder, queryRunner, metadata);
     }
 }
