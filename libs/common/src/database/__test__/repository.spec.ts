@@ -7,9 +7,14 @@ import {
     MockUserService,
 } from './mocks/user-service.mock';
 import { getDataSourceToken, getRepositoryToken } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, FindOneOptions, Repository } from 'typeorm';
 import { TableMetadata } from '../service.abstract';
-import { ConflictException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
+
+const mockuser = {
+    name: 'Pedro',
+    email: 'pedro@example.co',
+};
 
 describe('Abstract Repository', () => {
     let service: MockUserService;
@@ -54,16 +59,10 @@ describe('Abstract Repository', () => {
 
     describe('create', () => {
         it('should create a mock user', async () => {
-            const userDto: MockCreateUserDto = {
-                name: 'Pedro',
-                email: 'pedro@example.co',
-            };
+            const userDto: MockCreateUserDto = mockuser;
 
             const result = {
-                mockuser: {
-                    name: 'Pedro',
-                    email: 'pedro@example.co',
-                },
+                mockuser,
             };
 
             jest.spyOn(repository, 'create').mockImplementation(() => userDto);
@@ -88,6 +87,36 @@ describe('Abstract Repository', () => {
             expect(async () => await service.create(userDto)).rejects.toThrow(
                 ConflictException,
             );
+        });
+    });
+
+    describe('findOne', () => {
+        it('should find one user', async () => {
+            const findOptions: FindOneOptions<MockUser> = {
+                where: { name: 'Pedro' },
+            };
+
+            const result = {
+                mockuser,
+            };
+
+            jest.spyOn(repository, 'findOne').mockImplementation(async () => ({
+                ...mockuser,
+            }));
+
+            expect(await service.finOne(findOptions)).toStrictEqual(result);
+        });
+
+        it('should throw a not found error', async () => {
+            const findOptions: FindOneOptions<MockUser> = {
+                where: { name: 'Carlos' },
+            };
+
+            jest.spyOn(repository, 'findOne').mockImplementation(() => null);
+
+            expect(
+                async () => await service.finOne(findOptions),
+            ).rejects.toThrow(NotFoundException);
         });
     });
 });
