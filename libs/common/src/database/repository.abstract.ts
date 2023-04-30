@@ -1,41 +1,28 @@
+import 'reflect-metadata';
 import {
     ConflictException,
     HttpException,
     HttpStatus,
     NotFoundException,
 } from '@nestjs/common';
-import {
-    DeepPartial,
-    FindOneOptions,
-    ObjectLiteral,
-    Repository,
-} from 'typeorm';
+import { DataSource, DeepPartial, FindOneOptions, Repository } from 'typeorm';
 import { Criteria, FindOptions } from './types';
+import { SearchableKey } from './decorators/search.decorator';
 
-export abstract class AbstractRepository<TEntity extends ObjectLiteral> {
+export abstract class AbstractRepository<TEntity> {
     name: string;
     tableName: string;
     searchName: string;
 
     constructor(
         private repository: Repository<TEntity>,
-        name: string,
-        tableName: string,
-        searchName: string,
+        private dataSource: DataSource,
+        model: any,
     ) {
-        this.name = name;
+        this.searchName = Reflect.getMetadata(SearchableKey, model);
+        const { targetName, tableName } = this.dataSource.getMetadata(model);
+        this.name = targetName;
         this.tableName = tableName;
-        this.searchName = searchName;
-
-        if (!name || name.length === 0) {
-            throw new Error(`name of repository is not defined.`);
-        }
-        if (!tableName || tableName.length === 0) {
-            throw new Error(`tableName of repository is not defined.`);
-        }
-        if (!searchName || searchName.length === 0) {
-            throw new Error(`searchName of repository is not defined.`);
-        }
     }
 
     async finOne(findOptions: FindOneOptions<TEntity>) {
@@ -74,7 +61,7 @@ export abstract class AbstractRepository<TEntity extends ObjectLiteral> {
                 HttpStatus.BAD_REQUEST,
             );
 
-        if (search) {
+        if (search && this.searchName) {
             queryBuilder.where(
                 `LOWER(unaccent(${this.tableName}.${this.searchName})) LIKE LOWER(unaccent(:${this.searchName}))`,
                 {
