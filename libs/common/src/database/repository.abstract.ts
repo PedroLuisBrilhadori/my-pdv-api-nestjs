@@ -74,6 +74,8 @@ export abstract class AbstractRepository<TEntity> {
             const entries = Object.entries(orders);
             const queryOrder = {};
 
+            const queryRunner = this.dataSource.createQueryRunner();
+
             for (const sort of entries) {
                 const field = sort.shift() as keyof TEntity as string;
                 const order = sort.shift();
@@ -82,7 +84,9 @@ export abstract class AbstractRepository<TEntity> {
 
                 if (order !== 'desc' && order !== 'asc') continue;
 
-                queryOrder[`${this.tableName}.${field}`] = order.toUpperCase();
+                if (await queryRunner.hasColumn(this.tableName, field))
+                    queryOrder[`${this.tableName}.${field}`] =
+                        order.toUpperCase();
             }
 
             queryBuilder.orderBy(queryOrder);
