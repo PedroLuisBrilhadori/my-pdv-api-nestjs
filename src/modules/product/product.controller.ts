@@ -30,7 +30,7 @@ export class ProductController {
 
     @Get(':name')
     async getOne(@Param() { name }) {
-        return this.productService.findOne(name);
+        return this.productService.finOne(name);
     }
 
     @Delete(':name')

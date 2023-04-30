@@ -1,5 +1,4 @@
 import { Item } from 'src/modules/cart/model/item.model';
-import { BooleanTransformer } from '../../../utils/transformers';
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity('PDV_PRODUCTS')

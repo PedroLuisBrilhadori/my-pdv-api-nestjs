@@ -2,7 +2,6 @@ import {
     ConflictException,
     HttpException,
     HttpStatus,
-    Injectable,
     NotFoundException,
 } from '@nestjs/common';
 import {
@@ -13,17 +12,29 @@ import {
 } from 'typeorm';
 import { Criteria, FindOptions } from './types';
 
-@Injectable()
 export abstract class AbstractRepository<TEntity extends ObjectLiteral> {
     name: string;
     tableName: string;
+    searchName: string;
 
-    constructor(private repository: Repository<TEntity>) {
-        if (!this.name || this.name.length === 0) {
+    constructor(
+        private repository: Repository<TEntity>,
+        name: string,
+        tableName: string,
+        searchName: string,
+    ) {
+        this.name = name;
+        this.tableName = tableName;
+        this.searchName = searchName;
+
+        if (!name || name.length === 0) {
             throw new Error(`name of repository is not defined.`);
         }
-        if (!this.tableName || this.tableName.length === 0) {
+        if (!tableName || tableName.length === 0) {
             throw new Error(`tableName of repository is not defined.`);
+        }
+        if (!searchName || searchName.length === 0) {
+            throw new Error(`searchName of repository is not defined.`);
         }
     }
 
@@ -32,7 +43,9 @@ export abstract class AbstractRepository<TEntity extends ObjectLiteral> {
 
         if (!entity) throw new NotFoundException(`${this.name} not found.`);
 
-        return entity;
+        return {
+            [`${this.name.toLowerCase()}`]: entity,
+        };
     }
 
     async create(dto: DeepPartial<TEntity>) {
@@ -41,53 +54,62 @@ export abstract class AbstractRepository<TEntity extends ObjectLiteral> {
         try {
             await this.repository.save(entity);
 
-            return entity;
+            return {
+                [`${this.name.toLowerCase()}`]: entity,
+            };
         } catch (error) {
             console.error(error);
             throw new ConflictException(`${this.name} already exists.`);
         }
     }
 
-    async find(options: FindOptions) {
-        const skip = (options.page - 1) * options.max;
-        const queryBuider = this.repository.createQueryBuilder();
+    async find({ page, max, search, ...orders }: FindOptions) {
+        const skip = (page - 1) * max;
 
-        if (options.search) {
-            queryBuider.where(
-                `LOWER(unaccent(${this.tableName})) LIKE LOWER(unnacent(:name))`,
+        const queryBuilder = this.repository.createQueryBuilder(this.tableName);
+
+        if (typeof skip !== 'number')
+            throw new HttpException(
+                `skip is not defined.`,
+                HttpStatus.BAD_REQUEST,
+            );
+
+        if (search) {
+            queryBuilder.where(
+                `LOWER(unaccent(${this.tableName}.${this.searchName})) LIKE LOWER(unaccent(:${this.searchName}))`,
                 {
-                    name: `%${options.search}%`,
+                    [this.searchName]: `%${search}%`,
                 },
             );
         }
 
-        if (options.orders) {
-            const entries = Object.entries(options.orders);
+        if (orders) {
+            const entries = Object.entries(orders);
             const queryOrder = {};
 
             for (const sort of entries) {
-                const field = sort.shift() as keyof TEntity;
+                const field = sort.shift() as keyof TEntity as string;
                 const order = sort.shift();
 
                 if (!order || !field) continue;
 
-                if (order !== 'DESC' && order !== 'ASC') continue;
+                if (order !== 'desc' && order !== 'asc') continue;
 
-                queryOrder[`${this.tableName}.${field as string}`] = order;
+                queryOrder[`${this.tableName}.${field}`] = order.toUpperCase();
             }
 
-            queryBuider.orderBy(queryOrder);
+            queryBuilder.orderBy(queryOrder);
         }
 
-        const [data, total] = await queryBuider
-            .take(options.max)
+        const [data, total] = await queryBuilder
+            .take(max)
             .skip(skip)
             .getManyAndCount();
 
-        return { data, total, page: options.page };
+        return { data, total, page };
     }
 
-    async delete(criteria: Criteria) {
+    async delete(criteria: Criteria<TEntity>) {
         try {
             return await this.repository.delete(criteria);
         } catch (error) {

@@ -1,3 +1,5 @@
+import { FindOptionsWhere, ObjectID } from 'typeorm';
+
 export interface FindOptions {
     page: number;
     max: number;
@@ -5,7 +7,7 @@ export interface FindOptions {
     orders?: { [key: string]: 'DESC' | 'ASC' };
 }
 
-export type Criteria =
+export type Criteria<TEntity> =
     | string
     | string[]
     | number
