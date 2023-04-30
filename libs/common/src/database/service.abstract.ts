@@ -7,7 +7,12 @@ import {
 } from '@nestjs/common';
 import { DataSource, DeepPartial, FindOneOptions, Repository } from 'typeorm';
 import { Criteria, FindOptions } from './types/types';
-import { SearchableKey } from './decorators/search.decorator';
+
+export class TableMetadata {
+    name: string;
+    tableName: string;
+    searchName: string;
+}
 
 export abstract class AbstractService<TEntity> {
     name: string;
@@ -17,12 +22,11 @@ export abstract class AbstractService<TEntity> {
     constructor(
         private repository: Repository<TEntity>,
         private dataSource: DataSource,
-        model: any,
+        metadata: TableMetadata,
     ) {
-        this.searchName = Reflect.getMetadata(SearchableKey, model);
-        const { targetName, tableName } = this.dataSource.getMetadata(model);
-        this.name = targetName;
-        this.tableName = tableName;
+        this.name = metadata.name;
+        this.tableName = metadata.tableName;
+        this.searchName = metadata.searchName;
     }
 
     async finOne(findOptions: FindOneOptions<TEntity>) {
