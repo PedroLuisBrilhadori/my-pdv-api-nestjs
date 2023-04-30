@@ -6,7 +6,7 @@ import {
     NotFoundException,
 } from '@nestjs/common';
 import { DataSource, DeepPartial, FindOneOptions, Repository } from 'typeorm';
-import { Criteria, FindOptions } from './types';
+import { Criteria, FindOptions } from './types/types';
 import { SearchableKey } from './decorators/search.decorator';
 
 export abstract class AbstractRepository<TEntity> {
