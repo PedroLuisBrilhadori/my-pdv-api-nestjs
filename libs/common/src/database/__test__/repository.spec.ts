@@ -7,9 +7,14 @@ import {
     MockUserService,
 } from './mocks/user-service.mock';
 import { getDataSourceToken, getRepositoryToken } from '@nestjs/typeorm';
-import { DataSource, FindOneOptions, Repository } from 'typeorm';
+import { DataSource, DeleteResult, FindOneOptions, Repository } from 'typeorm';
 import { TableMetadata } from '../service.abstract';
-import { ConflictException, NotFoundException } from '@nestjs/common';
+import {
+    ConflictException,
+    HttpException,
+    NotFoundException,
+} from '@nestjs/common';
+import { Criteria } from '../types/types';
 
 const mockuser = {
     name: 'Pedro',
@@ -117,6 +122,35 @@ describe('Abstract Repository', () => {
             expect(
                 async () => await service.finOne(findOptions),
             ).rejects.toThrow(NotFoundException);
+        });
+    });
+
+    describe('delete', () => {
+        it('should delete a user', async () => {
+            const criteria: Criteria<MockUser> = mockuser.email;
+
+            const result: DeleteResult = {
+                raw: mockuser,
+                affected: 1,
+            };
+
+            jest.spyOn(repository, 'delete').mockImplementation(
+                async () => result,
+            );
+
+            expect(await service.delete(criteria)).toStrictEqual(result);
+        });
+
+        it('should throw an Error when database error happens.', async () => {
+            const criteria: Criteria<MockUser> = mockuser.email;
+
+            jest.spyOn(repository, 'delete').mockImplementation(async () => {
+                throw new Error();
+            });
+
+            expect(async () => await service.delete(criteria)).rejects.toThrow(
+                HttpException,
+            );
         });
     });
 });

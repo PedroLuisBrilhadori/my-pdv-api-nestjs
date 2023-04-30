@@ -109,7 +109,7 @@ export abstract class AbstractService<TEntity> {
             return await this.repository.delete(criteria);
         } catch (error) {
             throw new HttpException(
-                `${this.name} não deletado`,
+                `${criteria} is not deleted.`,
                 HttpStatus.NOT_MODIFIED,
             );
         }
