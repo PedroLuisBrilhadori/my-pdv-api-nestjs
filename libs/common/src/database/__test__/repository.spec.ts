@@ -36,10 +36,10 @@ const mockuser: MockUser = {
 
 const mockUsers: MockUser[] = [
     mockuser,
-    { name: 'Carlos', email: 'carlos@example.co' },
-    { name: 'Eduardo', email: 'eduardo@example.co' },
-    { name: 'Jefferson', email: 'jefferson@example.co' },
+    { name: 'Elle', email: 'elle@example.co' },
     { name: 'Kyle', email: 'kyle@example.co' },
+    { name: 'Carlos', email: 'carlos@example.co' },
+    { name: 'Jefferson', email: 'jefferson@example.co' },
     { name: 'Michel', email: 'michel@example.co' },
 ];
 
@@ -230,6 +230,54 @@ describe('Abstract Repository', () => {
             expect(async () => await service.find(findOptions)).rejects.toThrow(
                 BadRequestException,
             );
+        });
+
+        it('should find all users with "le" like ', async () => {
+            const findOptions: FindOptions = {
+                page: 1,
+                max: 5,
+                search: 'le',
+            };
+
+            const users = mockUsers.slice(1, 3);
+
+            const result = {
+                page: findOptions.page,
+                data: users,
+                total: users.length,
+            };
+
+            jest.spyOn(queryBuilder, 'where').mockImplementation();
+
+            jest.spyOn(queryBuilder, 'getManyAndCount').mockImplementation(
+                async () => [users, users.length],
+            );
+
+            expect(await service.find(findOptions)).toStrictEqual(result);
+        });
+
+        it('should find all users with "aaaa" like ', async () => {
+            const findOptions: FindOptions = {
+                page: 1,
+                max: 5,
+                search: 'aaaa',
+            };
+
+            const users = [];
+
+            const result = {
+                page: findOptions.page,
+                data: users,
+                total: users.length,
+            };
+
+            jest.spyOn(queryBuilder, 'where').mockImplementation();
+
+            jest.spyOn(queryBuilder, 'getManyAndCount').mockImplementation(
+                async () => [users, users.length],
+            );
+
+            expect(await service.find(findOptions)).toStrictEqual(result);
         });
     });
 });
