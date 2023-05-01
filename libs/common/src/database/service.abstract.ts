@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import {
     BadRequestException,
     ConflictException,
@@ -13,7 +12,8 @@ import {
     Repository,
     SelectQueryBuilder,
 } from 'typeorm';
-import { Criteria, FindOptions } from './types/types';
+import { Criteria, FindOptions, SortParam } from './types/types';
+import { isArray } from 'lodash';
 
 export class TableMetadata {
     name: string;
@@ -61,45 +61,14 @@ export abstract class AbstractService<TEntity> {
         }
     }
 
-    async find({ page, max, search, ...orders }: FindOptions) {
+    async find({ page, max, search, sort }: FindOptions) {
         const skip = (page - 1) * max;
 
-        if (typeof page !== 'number' || typeof max !== 'number') {
-            const param = typeof page !== 'number' ? 'page' : 'max';
+        if (search && this.searchName) this.addSearch(search);
 
-            throw new BadRequestException(
-                `the param: ${param} is not defined.`,
-            );
-        }
-
-        if (search && this.searchName) {
-            this.queryBuilder.where(
-                `LOWER(unaccent(${this.tableName}.${this.searchName})) LIKE LOWER(unaccent(:${this.searchName}))`,
-                {
-                    [this.searchName]: `%${search}%`,
-                },
-            );
-        }
-
-        const entries = Object.entries(orders);
-
-        if (entries.length > 0) {
-            const queryOrder = {};
-
-            for (const sort of entries) {
-                const field = sort.shift() as keyof TEntity as string;
-                const order = sort.shift();
-
-                if (!order || !field) continue;
-
-                if (order !== 'desc' && order !== 'asc') continue;
-
-                if (await this.queryRunner.hasColumn(this.tableName, field))
-                    queryOrder[`${this.tableName}.${field}`] =
-                        order.toUpperCase();
-            }
-
-            this.queryBuilder.orderBy(queryOrder);
+        if (sort) {
+            if (!isArray(sort)) sort = [sort];
+            await this.addOrders(sort);
         }
 
         const [data, total] = await this.queryBuilder
@@ -118,6 +87,31 @@ export abstract class AbstractService<TEntity> {
                 `${criteria} is not deleted.`,
                 HttpStatus.NOT_MODIFIED,
             );
+        }
+    }
+
+    private addSearch(search: string) {
+        this.queryBuilder.where(
+            `LOWER(unaccent(${this.tableName}.${this.searchName})) LIKE LOWER(unaccent(:${this.searchName}))`,
+            {
+                [this.searchName]: `%${search}%`,
+            },
+        );
+    }
+
+    private async addOrders(sorts: SortParam[]) {
+        for (const { order, field } of sorts) {
+            const hasColumn = await this.queryRunner.hasColumn(
+                this.tableName,
+                field,
+            );
+
+            if (!hasColumn)
+                throw new BadRequestException(
+                    `field: ${field} does exists in ${this.name}`,
+                );
+
+            this.queryBuilder.addOrderBy(field, order);
         }
     }
 }

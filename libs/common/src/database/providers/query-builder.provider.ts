@@ -1,10 +1,16 @@
-import { DataSource, QueryBuilder, SelectQueryBuilder } from 'typeorm';
+import {
+    DataSource,
+    ObjectLiteral,
+    QueryBuilder,
+    SelectQueryBuilder,
+} from 'typeorm';
 import { Provider } from '@nestjs/common';
 
-export const QueryBuilderProvider = <TEntity>(model: any): Provider => ({
+export const QueryBuilderProvider = (model: any): Provider => ({
     provide: QueryBuilder.name,
     inject: [DataSource],
-    useFactory: (dataSource: DataSource): SelectQueryBuilder<TEntity> => {
-        return dataSource.createQueryBuilder(model.name);
+    useFactory: (dataSource: DataSource): SelectQueryBuilder<ObjectLiteral> => {
+        const { tableName } = dataSource.getMetadata(model);
+        return dataSource.createQueryBuilder(model, tableName);
     },
 });

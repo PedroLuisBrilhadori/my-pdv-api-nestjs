@@ -7,11 +7,12 @@ import {
     Body,
     Param,
     Query,
+    ValidationPipe,
 } from '@nestjs/common';
 import { CreateProductDto } from './dto/product.dto';
 import { ProductService } from './product.service';
 import { JwtAuthGuard } from '../Auth/guards/jwt-auth.guard';
-import { FindOptions } from 'src/utils/types';
+import { FindOptions } from '@app/common';
 
 @Controller('products')
 export class ProductController {
@@ -24,7 +25,10 @@ export class ProductController {
     }
 
     @Get()
-    async getAll(@Query() options: FindOptions) {
+    async getAll(
+        @Query()
+        options: FindOptions,
+    ) {
         return this.productService.find(options);
     }
 
