@@ -4,9 +4,9 @@ import {
     QueryBuilder,
     SelectQueryBuilder,
 } from 'typeorm';
-import { Provider } from '@nestjs/common';
+import { FactoryProvider } from '@nestjs/common';
 
-export const QueryBuilderProvider = (model: any): Provider => ({
+export const QueryBuilderProvider = (model: any): FactoryProvider => ({
     provide: QueryBuilder.name,
     inject: [DataSource],
     useFactory: (dataSource: DataSource): SelectQueryBuilder<ObjectLiteral> => {
