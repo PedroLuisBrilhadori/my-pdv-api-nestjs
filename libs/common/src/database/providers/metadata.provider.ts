@@ -1,10 +1,10 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import { TableMetadata } from '../service.abstract';
-import { Provider } from '@nestjs/common';
+import { FactoryProvider } from '@nestjs/common';
 import { SearchableKey } from '../decorators/search.decorator';
 
-export const TableMetadataProvider = (model: any): Provider => ({
+export const TableMetadataProvider = (model: any): FactoryProvider => ({
     provide: TableMetadata.name,
     inject: [DataSource],
     useFactory: (dataSource: DataSource): TableMetadata => {
