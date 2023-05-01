@@ -20,6 +20,7 @@
         ".module.ts",
         "<rootDir>/src/app/main.ts",
         ".mock.ts",
+        ".model.ts",
         "index.ts"
     ]
 }

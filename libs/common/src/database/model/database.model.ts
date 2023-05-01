@@ -1,7 +1,7 @@
 import { Transform, Type } from 'class-transformer';
 import { IsInt, IsNotEmpty, IsOptional, IsString, Min } from 'class-validator';
 import { FindOptionsWhere, ObjectID } from 'typeorm';
-import { transformSortType } from './transform';
+import { transformSortType } from './transform.model';
 
 export class FindOptions {
     @IsInt()

@@ -12,7 +12,7 @@ import {
     Repository,
     SelectQueryBuilder,
 } from 'typeorm';
-import { Criteria, FindOptions, SortParam } from './types/types';
+import { Criteria, FindOptions, SortParam } from './model/database.model';
 import { isArray } from 'lodash';
 
 export class TableMetadata {

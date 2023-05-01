@@ -26,7 +26,7 @@ import {
     HttpException,
     NotFoundException,
 } from '@nestjs/common';
-import { Criteria, FindOptions } from '../types/types';
+import { Criteria, FindOptions } from '../model/database.model';
 import { QueryBuilderProvider, QueryRunnerProvider } from '../providers';
 
 const mockuser: MockUser = {
