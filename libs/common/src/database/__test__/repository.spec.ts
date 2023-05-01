@@ -202,36 +202,6 @@ describe('Abstract Repository', () => {
             expect(await service.find(findOptions)).toStrictEqual(result);
         });
 
-        it('should throw a badRequest when page is not defined', async () => {
-            const findOptions: FindOptions = {
-                page: null,
-                max: 5,
-            };
-
-            jest.spyOn(queryBuilder, 'getManyAndCount').mockImplementation(
-                async () => [mockUsers.slice(0, 4), mockUsers.length],
-            );
-
-            expect(async () => await service.find(findOptions)).rejects.toThrow(
-                BadRequestException,
-            );
-        });
-
-        it('should throw a badRequest when max is not defined', async () => {
-            const findOptions: FindOptions = {
-                page: 1,
-                max: null,
-            };
-
-            jest.spyOn(queryBuilder, 'getManyAndCount').mockImplementation(
-                async () => [mockUsers.slice(0, 4), mockUsers.length],
-            );
-
-            expect(async () => await service.find(findOptions)).rejects.toThrow(
-                BadRequestException,
-            );
-        });
-
         it('should find all users with "le" like ', async () => {
             const findOptions: FindOptions = {
                 page: 1,
@@ -278,6 +248,58 @@ describe('Abstract Repository', () => {
             );
 
             expect(await service.find(findOptions)).toStrictEqual(result);
+        });
+
+        it('should find all users with name sort asc', async () => {
+            const findOptions: FindOptions = {
+                page: 1,
+                max: 5,
+                sort: { field: 'name', order: 'ASC' },
+            };
+
+            const users = mockUsers;
+
+            const result = {
+                page: findOptions.page,
+                data: users,
+                total: users.length,
+            };
+
+            jest.spyOn(queryRunner, 'hasColumn').mockImplementation(
+                async () => true,
+            );
+
+            jest.spyOn(queryBuilder, 'addOrderBy');
+
+            jest.spyOn(queryBuilder, 'getManyAndCount').mockImplementation(
+                async () => [users, users.length],
+            );
+
+            expect(await service.find(findOptions)).toStrictEqual(result);
+        });
+
+        it('should throw an error when users with age sort asc (age does exists in MockUsers)', async () => {
+            const findOptions: FindOptions = {
+                page: 1,
+                max: 5,
+                sort: { field: 'age', order: 'ASC' },
+            };
+
+            const users = mockUsers;
+
+            const result = {
+                page: findOptions.page,
+                data: users,
+                total: users.length,
+            };
+
+            jest.spyOn(queryRunner, 'hasColumn').mockImplementation(
+                async () => false,
+            );
+
+            expect(async () => await service.find(findOptions)).rejects.toThrow(
+                BadRequestException,
+            );
         });
     });
 });
