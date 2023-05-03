@@ -12,7 +12,8 @@ import {
     Repository,
     SelectQueryBuilder,
 } from 'typeorm';
-import { Criteria, FindOptions, SortParam } from './model/database.model';
+import { FindOptionsDto } from './dto';
+import { Criteria, SortParam } from './types';
 import { isArray } from 'lodash';
 
 export class TableMetadata {
@@ -37,8 +38,8 @@ export abstract class AbstractService<TEntity> {
         this.searchName = metadata.searchName;
     }
 
-    async finOne(findOptions: FindOneOptions<TEntity>) {
-        const entity = await this.repository.findOne(findOptions);
+    async finOne(FindOptionsDto: FindOneOptions<TEntity>) {
+        const entity = await this.repository.findOne(FindOptionsDto);
 
         if (!entity) throw new NotFoundException(`${this.name} not found.`);
 
@@ -61,7 +62,7 @@ export abstract class AbstractService<TEntity> {
         }
     }
 
-    async find({ page, max, search, sort }: FindOptions) {
+    async find({ page, max, search, sort }: FindOptionsDto) {
         const skip = (page - 1) * max;
 
         if (search && this.searchName) this.addSearch(search);
