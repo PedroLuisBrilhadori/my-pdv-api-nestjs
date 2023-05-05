@@ -1,34 +1,15 @@
-import {
-    BadRequestException,
-    ConflictException,
-    HttpException,
-    HttpStatus,
-    NotFoundException,
-} from '@nestjs/common';
-import {
-    DeepPartial,
-    FindOneOptions,
-    QueryRunner,
-    Repository,
-    SelectQueryBuilder,
-} from 'typeorm';
-import { FindOptionsDto } from './dto';
-import { Criteria, SortParam } from './types';
-import { isArray } from 'lodash';
+import { BadRequestException } from '@nestjs/common';
+import { QueryRunner, SelectQueryBuilder } from 'typeorm';
+import { isArray } from 'class-validator';
+import { SortParam, TableMetadata } from '../types';
+import { FindOptionsDto } from '../dto';
 
-export class TableMetadata {
-    name: string;
-    tableName: string;
-    searchName: string;
-}
-
-export abstract class AbstractService<TEntity> {
+export abstract class AbstractFindRepository<TEntity> {
     name: string;
     tableName: string;
     searchName: string;
 
     constructor(
-        private repository: Repository<TEntity>,
         private queryBuilder: SelectQueryBuilder<TEntity>,
         private queryRunner: QueryRunner,
         metadata: TableMetadata,
@@ -36,30 +17,6 @@ export abstract class AbstractService<TEntity> {
         this.name = metadata.name;
         this.tableName = metadata.tableName;
         this.searchName = metadata.searchName;
-    }
-
-    async finOne(FindOptionsDto: FindOneOptions<TEntity>) {
-        const entity = await this.repository.findOne(FindOptionsDto);
-
-        if (!entity) throw new NotFoundException(`${this.name} not found.`);
-
-        return {
-            [`${this.name.toLowerCase()}`]: entity,
-        };
-    }
-
-    async create(dto: DeepPartial<TEntity>) {
-        const entity = this.repository.create(dto);
-
-        try {
-            await this.repository.save(entity);
-
-            return {
-                [`${this.name.toLowerCase()}`]: entity,
-            };
-        } catch (error) {
-            throw new ConflictException(`${this.name} already exists.`);
-        }
     }
 
     async find({ page, max, search, sort }: FindOptionsDto) {
@@ -78,17 +35,6 @@ export abstract class AbstractService<TEntity> {
             .getManyAndCount();
 
         return { data, total, page };
-    }
-
-    async delete(criteria: Criteria<TEntity>) {
-        try {
-            return await this.repository.delete(criteria);
-        } catch (error) {
-            throw new HttpException(
-                `${criteria} is not deleted.`,
-                HttpStatus.NOT_MODIFIED,
-            );
-        }
     }
 
     private addSearch(search: string) {

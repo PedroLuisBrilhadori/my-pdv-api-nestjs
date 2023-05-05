@@ -6,6 +6,12 @@ export class SortParam {
     order: 'ASC' | 'DESC';
 }
 
+export class TableMetadata {
+    name: string;
+    tableName: string;
+    searchName: string;
+}
+
 export type Criteria<TEntity> =
     | string
     | string[]

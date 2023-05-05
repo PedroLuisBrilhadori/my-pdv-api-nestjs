@@ -19,7 +19,7 @@ import {
     Repository,
     SelectQueryBuilder,
 } from 'typeorm';
-import { TableMetadata } from '../service.abstract';
+import { TableMetadata } from '../repositories/delete.repository';
 import {
     BadRequestException,
     ConflictException,
