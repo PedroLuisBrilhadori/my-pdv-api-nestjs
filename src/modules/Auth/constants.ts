@@ -1,7 +1,15 @@
-import { config } from 'dotenv';
+import { Injectable } from '@nestjs/common';
+import { JwtModuleOptions, JwtOptionsFactory } from '@nestjs/jwt';
+import { ConfigAppService } from 'src/config/config.service';
 
-config();
+@Injectable()
+export class JwtConfigService implements JwtOptionsFactory {
+    constructor(private readonly configService: ConfigAppService) {}
 
-export const jwtConstants = {
-    secret: process.env.JWT_TOKEN,
-};
+    createJwtOptions(): JwtModuleOptions {
+        return {
+            secret: this.configService.get('JWT_SECRET'),
+            signOptions: { expiresIn: '1h' },
+        };
+    }
+}
