@@ -1,1 +1,1 @@
-export * from './database/ormConfig';
+export * from './database/orm.config';

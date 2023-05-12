@@ -1,10 +1,8 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { config } from 'dotenv';
 import { readFileSync } from 'fs';
-
-config();
+import { ConfigAppService } from './config/config.service';
 
 async function bootstrap() {
     const httpsOptions = {
@@ -15,6 +13,9 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule, { httpsOptions });
     app.useGlobalPipes(new ValidationPipe());
     app.enableCors();
-    await app.listen(3001);
+
+    const configService = app.get(ConfigAppService);
+    const port = configService.getNumber('PORT');
+    await app.listen(port);
 }
 bootstrap();

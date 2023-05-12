@@ -1,22 +1,26 @@
 import { Module, forwardRef } from '@nestjs/common';
-import { AuthService } from './auth.service';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './constants';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthService } from './auth.service';
+import { ConfigAppModule } from 'src/config/config.module';
+import { ConfigAppService } from 'src/config/config.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local-strategy';
 import { AuthController } from './auth.controller';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../user/model/user.model';
 import { UserModule } from '../user/user.module';
+import { JwtConfigService } from './constants';
 
 @Module({
     imports: [
+        ConfigAppModule,
         PassportModule,
-        JwtModule.register({
-            secret: jwtConstants.secret,
-            signOptions: { expiresIn: '1h' },
+        JwtModule.registerAsync({
+            imports: [ConfigAppModule],
+            inject: [ConfigAppService],
+            useClass: JwtConfigService,
         }),
         TypeOrmModule.forFeature([User]),
         forwardRef(() => UserModule),
