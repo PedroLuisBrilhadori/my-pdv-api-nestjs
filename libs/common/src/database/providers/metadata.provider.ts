@@ -11,7 +11,7 @@ export const TableMetadataProvider = (model: any): FactoryProvider => ({
         const searchName = Reflect.getMetadata(SearchableKey, model);
         const { targetName, tableName } = dataSource.getMetadata(model);
 
-        if (!model || !model?.name)
+        if (!model)
             throw new Error(
                 `Class model not provider in ${TableMetadataProvider.name}`,
             );

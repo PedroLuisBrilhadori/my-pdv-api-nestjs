@@ -4,7 +4,7 @@ import { isArray } from 'class-validator';
 import { SortParam, TableMetadata } from '../types';
 import { FindOptionsDto } from '../dto';
 
-export abstract class AbstractFindRepository<TEntity> {
+export abstract class AbstractFindService<TEntity> {
     name: string;
     tableName: string;
     searchName: string;

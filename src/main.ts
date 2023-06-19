@@ -7,10 +7,14 @@ import { readFileSync } from 'fs';
 config();
 
 async function bootstrap() {
-    const httpsOptions = {
-        key: readFileSync('./certificates/localhost-key.pem'),
-        cert: readFileSync('./certificates/localhost.pem'),
-    };
+    let httpsOptions = {}
+
+    if (process.env.HTTPS) {
+        httpsOptions = {
+           key: readFileSync('./certificates/localhost-key.pem'),
+           cert: readFileSync('./certificates/localhost.pem'),
+       };
+    }
 
     const app = await NestFactory.create(AppModule, { httpsOptions });
     app.useGlobalPipes(
@@ -21,4 +25,10 @@ async function bootstrap() {
     app.enableCors();
     await app.listen(3001);
 }
-bootstrap();
+
+bootstrap().then(() => {
+    console.log('App bootstrapted');
+}).catch((error) => {
+    console.error('App not bootstrapted');
+    console.error(error);
+})

@@ -2,7 +2,7 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Criteria } from '../types';
 
-export abstract class AbstractDeleteRepository<TEntity> {
+export abstract class AbstractDeleteService<TEntity> {
     constructor(private repository: Repository<TEntity>) {}
 
     async delete(criteria: Criteria<TEntity>) {

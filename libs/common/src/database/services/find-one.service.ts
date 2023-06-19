@@ -2,7 +2,7 @@ import { NotFoundException } from '@nestjs/common';
 import { FindOneOptions, Repository } from 'typeorm';
 import { TableMetadata } from '../types';
 
-export abstract class AbstractFindOneRepository<TEntity> {
+export abstract class AbstractFindOneService<TEntity> {
     name: string;
     tableName: string;
     searchName: string;

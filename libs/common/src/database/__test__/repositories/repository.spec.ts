@@ -2,13 +2,13 @@ import { Test } from '@nestjs/testing';
 import {
     MockQueryRunner,
     dataSourceMockFactory,
-} from './mocks/datasource.mock';
-import { MockQueryBuilder, MockRepository } from './mocks/repository.mock';
+} from '../mocks/datasource.mock';
+import { MockQueryBuilder, MockRepository } from '../mocks/repository.mock';
 import {
     MockCreateUserDto,
     MockUser,
     MockUserService,
-} from './mocks/user-service.mock';
+} from '../mocks/user-service.mock';
 import { getDataSourceToken, getRepositoryToken } from '@nestjs/typeorm';
 import {
     DataSource,
@@ -19,15 +19,15 @@ import {
     Repository,
     SelectQueryBuilder,
 } from 'typeorm';
-import { TableMetadata } from '../services/delete.service';
+import { TableMetadata } from '../../services/delete.service';
 import {
     BadRequestException,
     ConflictException,
     HttpException,
     NotFoundException,
 } from '@nestjs/common';
-import { Criteria, FindOptions } from '../types/database.types';
-import { QueryBuilderProvider, QueryRunnerProvider } from '../providers';
+import { Criteria, FindOptions } from '../../types/database.types';
+import { QueryBuilderProvider, QueryRunnerProvider } from '../../providers';
 
 const mockuser: MockUser = {
     name: 'Pedro',

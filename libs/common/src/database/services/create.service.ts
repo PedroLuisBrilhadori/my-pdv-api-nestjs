@@ -2,7 +2,7 @@ import { DeepPartial, Repository } from 'typeorm';
 import { TableMetadata } from '../types';
 import { ConflictException } from '@nestjs/common';
 
-export abstract class AbstractCreateRepository<TEntity> {
+export abstract class AbstractCreateService<TEntity> {
     name: string;
     tableName: string;
     searchName: string;

@@ -9,7 +9,7 @@
         "build": "nest build",
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
         "start": "nest start",
-        "dev": "kill-port 3001 && nest start --watch",
+        "dev": "nest start --watch",
         "start:debug": "nest start --debug --watch",
         "start:prod": "node dist/main",
         "docker:up": "docker compose up -d",
