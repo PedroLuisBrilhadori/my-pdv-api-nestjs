@@ -1,24 +1,12 @@
-import { FindOneOptions, Repository } from "typeorm";
-import { MockFindOneUserService, MockRepository, MockUser } from "../mocks";
+import { NotFoundException } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { getRepositoryToken } from "@nestjs/typeorm";
+import { FindOneOptions, Repository } from "typeorm";
+
 import { TableMetadata } from "../../types";
-import { NotFoundException } from "@nestjs/common";
+import { MockFindOneUserService, MockRepository, MockUser, createUser } from "../mocks";
 
-const mockuser: MockUser = {
-    name: 'Pedro',
-    email: 'pedro@example.co',
-};
-
-const mockUsers: MockUser[] = [
-    mockuser,
-    { name: 'Elle', email: 'elle@example.co' },
-    { name: 'Kyle', email: 'kyle@example.co' },
-    { name: 'Carlos', email: 'carlos@example.co' },
-    { name: 'Jefferson', email: 'jefferson@example.co' },
-    { name: 'Michel', email: 'michel@example.co' },
-];
-
+const mockuser: MockUser = createUser();
 
 describe('Abstract FindOne Service', () => {
 

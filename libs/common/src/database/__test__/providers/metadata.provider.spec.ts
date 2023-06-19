@@ -1,8 +1,8 @@
-import {TableMetadataProvider} from '../../providers';
-import { MockClass, createTestingModule, mockDataSource } from '../mocks';
-import { MockUser } from '../mocks/user-service.mock';
-import { TestingModule } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
+import { TestingModule } from '@nestjs/testing';
+
+import { MockUser, MockClass, createTestingModule, mockDataSource } from '../mocks';
+import {TableMetadataProvider} from '../../providers';
 
 
 describe('Metadata provider', () => {

@@ -1,5 +1,5 @@
-import { MockType } from '../../../utils';
 import { DataSource } from 'typeorm';
+import { MockType } from '../../../utils';
 
 export const dataSourceMockFactory: () => MockType<DataSource> = jest.fn(
     () => ({

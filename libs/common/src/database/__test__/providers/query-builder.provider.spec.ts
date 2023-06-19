@@ -1,7 +1,8 @@
 import { DataSource } from "typeorm";
+import { TestingModule } from "@nestjs/testing";
+
 import { QueryBuilderProvider } from "../../providers";
 import { MockUser, createTestingModule, mockDataSource } from "../mocks";
-import { TestingModule } from "@nestjs/testing";
 
 describe('QueryBuilder Provider', () => {
     it('should return a querybuilder instance', async () => {

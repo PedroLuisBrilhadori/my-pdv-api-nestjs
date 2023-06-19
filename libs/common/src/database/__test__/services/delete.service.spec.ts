@@ -1,23 +1,12 @@
-import { DeleteResult, Repository } from "typeorm";
-import { MockDeleteUserService, MockRepository, MockUser } from "../mocks";
-import { Test } from "@nestjs/testing";
-import { getRepositoryToken } from "@nestjs/typeorm";
-import { Criteria } from "../../types";
 import { HttpException } from "@nestjs/common";
+import { getRepositoryToken } from "@nestjs/typeorm";
+import { Test } from "@nestjs/testing";
+import { DeleteResult, Repository } from "typeorm";
 
-const mockuser: MockUser = {
-    name: 'Pedro',
-    email: 'pedro@example.co',
-};
+import { MockDeleteUserService, MockRepository, MockUser, createUser } from "../mocks";
+import { Criteria } from "../../types";
 
-const mockUsers: MockUser[] = [
-    mockuser,
-    { name: 'Elle', email: 'elle@example.co' },
-    { name: 'Kyle', email: 'kyle@example.co' },
-    { name: 'Carlos', email: 'carlos@example.co' },
-    { name: 'Jefferson', email: 'jefferson@example.co' },
-    { name: 'Michel', email: 'michel@example.co' },
-];
+const mockuser = createUser();
 
 describe('Abstract Delete service', () => {
     let service: MockDeleteUserService;

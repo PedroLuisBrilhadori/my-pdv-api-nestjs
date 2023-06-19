@@ -7,17 +7,25 @@ import {
     Repository,
     SelectQueryBuilder,
 } from 'typeorm';
+import { faker } from '@faker-js/faker';
+import { Inject, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+
+
+import { AbstractCreateService, AbstractDeleteService, AbstractFindOneService, AbstractFindService } from '../../services';
 import { Searchable } from '../../decorators/search.decorator';
 import { TableMetadata } from '../../types';
-import { Inject, Injectable } from '@nestjs/common';
-import { AbstractCreateService, AbstractDeleteService, AbstractFindOneService, AbstractFindService } from '../../services';
-import { InjectRepository } from '@nestjs/typeorm';
 import { QueryRunnerProvider } from '../../providers';
 
 export class MockCreateUserDto {
     name: string;
     email: string;
 }
+
+export const createUser = (): MockUser => ({
+    name: faker.person.fullName(),
+    email: faker.internet.email()
+})
 
 @Entity('MOCK_USERS')
 @Searchable('name')

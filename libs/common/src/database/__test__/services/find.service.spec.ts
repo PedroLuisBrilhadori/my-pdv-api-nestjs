@@ -1,23 +1,20 @@
 import { QueryBuilder, QueryRunner, Repository, SelectQueryBuilder } from "typeorm";
-import { MockFindUserService, MockQueryBuilder, MockQueryRunner, MockUser } from "../mocks";
+import { BadRequestException } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
+
 import { QueryRunnerProvider } from "../../providers";
 import { TableMetadata } from "../../types";
 import { FindOptionsDto } from "../../dto";
-import { BadRequestException } from "@nestjs/common";
-
-const mockuser: MockUser = {
-    name: 'Pedro',
-    email: 'pedro@example.co',
-};
+import { MockFindUserService, MockQueryBuilder, MockQueryRunner, MockUser, createUser } from "../mocks";
 
 const mockUsers: MockUser[] = [
-    mockuser,
-    { name: 'Elle', email: 'elle@example.co' },
-    { name: 'Kyle', email: 'kyle@example.co' },
-    { name: 'Carlos', email: 'carlos@example.co' },
-    { name: 'Jefferson', email: 'jefferson@example.co' },
-    { name: 'Michel', email: 'michel@example.co' },
+    createUser(),
+    createUser(),
+    createUser(),
+    createUser(),
+    createUser(),
+    createUser(),
+    createUser(),
 ];
 
 describe('Abstract Find Service', () => {

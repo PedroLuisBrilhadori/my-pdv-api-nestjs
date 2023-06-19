@@ -1,23 +1,22 @@
 import { ConflictException } from "@nestjs/common";
-import { Repository} from "typeorm";
-import { TableMetadata } from "../../types";
 import { getRepositoryToken } from "@nestjs/typeorm";
 import { Test } from "@nestjs/testing";
-import { MockCreateUserDto, MockCreateUserService, MockRepository, MockUser } from "../mocks";
+import { Repository} from "typeorm";
 
-const mockuser: MockUser = {
-    name: 'Pedro',
-    email: 'pedro@example.co',
-};
+import { TableMetadata } from "../../types";
+import { MockCreateUserDto, MockCreateUserService, MockRepository, MockUser, createUser } from "../mocks";
 
 const mockUsers: MockUser[] = [
-    mockuser,
-    { name: 'Elle', email: 'elle@example.co' },
-    { name: 'Kyle', email: 'kyle@example.co' },
-    { name: 'Carlos', email: 'carlos@example.co' },
-    { name: 'Jefferson', email: 'jefferson@example.co' },
-    { name: 'Michel', email: 'michel@example.co' },
+    createUser(),
+    createUser(),
+    createUser(),
+    createUser(),
+    createUser(),
+    createUser(),
+    createUser(),
 ];
+
+const mockuser = mockUsers[0];
 
 describe('Abstract Create service', () => {
     let service: MockCreateUserService;
