@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsOptional, IsString, Min } from 'class-validator';
+import { IsInt, IsOptional, IsString, Min } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { transformSortType } from '../../utils';
 import { SortParam } from '../types';
