@@ -1,4 +1,3 @@
-import { FindOptionsDto } from '@app/common/database';
 import { Controller, Get, Param } from '@nestjs/common';
 import { FindOneProductService } from '../services';
 
@@ -8,6 +7,6 @@ export class FindOneProductController {
 
     @Get(':name')
     async execute(@Param() { name }) {
-        return this.service.findOne(name);
+        return this.service.findOne({where: {name}});
     }
 }

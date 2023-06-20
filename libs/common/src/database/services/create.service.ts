@@ -20,10 +20,10 @@ export abstract class AbstractCreateService<TEntity> {
         const entity = this.repository.create(dto);
 
         try {
-            await this.repository.save(entity);
+            const createdEntity = await this.repository.save(entity);
 
             return {
-                [`${this.name.toLowerCase()}`]: entity,
+                [`${this.name.toLowerCase()}`]: createdEntity,
             };
         } catch (error) {
             throw new ConflictException(`${this.name} already exists.`);

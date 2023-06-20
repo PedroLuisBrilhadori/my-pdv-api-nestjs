@@ -7,7 +7,7 @@ import { readFileSync } from 'fs';
 config();
 
 async function bootstrap() {
-    let httpsOptions = {}
+    let httpsOptions: {key?: Buffer, cert?: Buffer} = {}
 
     if (process.env.HTTPS) {
         httpsOptions = {
@@ -16,7 +16,9 @@ async function bootstrap() {
        };
     }
 
-    const app = await NestFactory.create(AppModule, { httpsOptions });
+
+    let app = httpsOptions?.key ? await NestFactory.create(AppModule, {httpsOptions})  : await NestFactory.create(AppModule);
+    
     app.useGlobalPipes(
         new ValidationPipe({
             transform: true,
