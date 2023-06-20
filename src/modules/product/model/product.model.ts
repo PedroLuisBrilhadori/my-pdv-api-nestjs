@@ -1,8 +1,9 @@
+import { Searchable } from '@app/common';
 import { Item } from 'src/modules/cart/model/item.model';
-import { BooleanTransformer } from '../../../utils/transformers';
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity('PDV_PRODUCTS')
+@Searchable('name')
 export class Product {
     @PrimaryColumn('varchar', { unique: true })
     name: string;

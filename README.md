@@ -14,6 +14,7 @@ $ yarn
 # app config
 PORT=
 DEBUG=
+HTTPS=
 
 # app secrets
 JWT_TOKEN=testejwt
