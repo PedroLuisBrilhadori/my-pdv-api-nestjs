@@ -22,7 +22,7 @@ export abstract class AbstractFindOneService<TEntity> {
         if (!entity) throw new NotFoundException(`${this.name} not found.`);
 
         return {
-            [`${this.name.toLowerCase()}`]: entity,
+            data: entity,
         };
     }
 }

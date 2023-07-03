@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards, Param } from '@nestjs/common';
 import { FindOneUserService } from '../services';
-import { JwtAuthGuard } from 'src/modules/Auth';
+import { JwtAuthGuard, Role, Roles } from 'src/modules/Auth';
 
 @Controller('user')
 export class FindOneUserController {
@@ -8,6 +8,7 @@ export class FindOneUserController {
 
     @UseGuards(JwtAuthGuard)
     @Get('/:email')
+    @Roles(Role.User)
     async execute(@Param() { email }) {
         return this.service.findOne({ where: { email } });
     }

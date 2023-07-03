@@ -1,6 +1,6 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { FindOneUserService } from './find-one-user.service';
-import { Bcrypt } from './create-user.service';
+import { Bcrypt } from '../types';
 
 @Injectable()
 export class FindUserPasswordService {
@@ -10,14 +10,14 @@ export class FindUserPasswordService {
     ) {}
 
     async findPassword(email: string, password: string) {
-        const { user } = await this.findOneService.findOne({
+        const { data } = await this.findOneService.findOne({
             where: { email },
         });
 
-        if (!this.bcrypt.compare(password, user.password)) {
+        if (!this.bcrypt.compare(password, data.password)) {
             throw new UnauthorizedException();
         }
 
-        return user;
+        return data;
     }
 }

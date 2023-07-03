@@ -1,7 +1,7 @@
 import { Controller, Get, UseGuards, Query } from '@nestjs/common';
 import { FindOptionsDto } from '@app/common/database';
 import { FindUserService } from '../services';
-import { JwtAuthGuard } from '../../Auth';
+import { JwtAuthGuard, Role, Roles } from '../../Auth';
 
 @Controller('user')
 export class FindUserController {
@@ -9,6 +9,7 @@ export class FindUserController {
 
     @UseGuards(JwtAuthGuard)
     @Get('')
+    @Roles(Role.User)
     async execute(
         @Query()
         options: FindOptionsDto,

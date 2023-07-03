@@ -3,13 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AbstractCreateService, TableMetadata } from '@app/common';
 import { User } from '../model/user.model';
-import { compare, hash } from 'bcrypt';
 import { CreateUserDto } from '../dto/user.dto';
-
-export type Bcrypt = {
-    hash: typeof hash;
-    compare: typeof compare;
-};
+import { Bcrypt } from '../types';
 
 @Injectable()
 export class CreateUserService extends AbstractCreateService<User> {
