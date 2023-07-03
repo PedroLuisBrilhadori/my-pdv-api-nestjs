@@ -1,6 +1,8 @@
+import { Searchable } from '@app/common/database';
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity('DD_USERS')
+@Searchable('email')
 export class User {
     @PrimaryColumn('varchar', { length: 150, nullable: false })
     email: string;
