@@ -1,9 +1,13 @@
 import { DataSource } from 'typeorm';
 import { TestingModule } from '@nestjs/testing';
 
-import { MockUser, MockClass, createTestingModule, mockDataSource } from '../mocks';
-import {TableMetadataProvider} from '../../providers';
-
+import {
+    MockUser,
+    MockClass,
+    createTestingModule,
+    mockDataSource,
+} from '../mocks';
+import { TableMetadataProvider } from '../../providers';
 
 describe('Metadata provider', () => {
     it('should return a metadata of entity', async () => {
@@ -32,7 +36,7 @@ describe('Metadata provider', () => {
 
     it('should return an error when class not found', async () => {
         const module = async () =>
-            await createTestingModule([TableMetadataProvider({})], {
+            await createTestingModule([TableMetadataProvider(undefined)], {
                 provide: DataSource,
                 useValue: mockDataSource,
             });

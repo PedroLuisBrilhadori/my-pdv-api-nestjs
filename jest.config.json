@@ -21,6 +21,8 @@
         "<rootDir>/src/app/main.ts",
         ".mock.ts",
         ".model.ts",
+        ".dto.ts",
+        ".types.ts",
         "index.ts"
     ]
 }

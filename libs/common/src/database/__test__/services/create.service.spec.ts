@@ -1,10 +1,16 @@
-import { ConflictException } from "@nestjs/common";
-import { getRepositoryToken } from "@nestjs/typeorm";
-import { Test } from "@nestjs/testing";
-import { Repository} from "typeorm";
+import { ConflictException } from '@nestjs/common';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Test } from '@nestjs/testing';
+import { Repository } from 'typeorm';
 
-import { TableMetadata } from "../../types";
-import { MockCreateUserDto, MockCreateUserService, MockRepository, MockUser, createUser } from "../mocks";
+import { TableMetadata } from '../../types';
+import {
+    MockCreateUserDto,
+    MockCreateUserService,
+    MockRepository,
+    MockUser,
+    createUser,
+} from '../mocks';
 
 const mockUsers: MockUser[] = [
     createUser(),
@@ -47,7 +53,6 @@ describe('Abstract Create service', () => {
         );
     });
 
-
     it('should create a mock user', async () => {
         const userDto: MockCreateUserDto = mockuser;
 
@@ -57,7 +62,7 @@ describe('Abstract Create service', () => {
 
         jest.spyOn(repository, 'create').mockImplementation(() => userDto);
 
-        jest.spyOn(repository, 'save');
+        jest.spyOn(repository, 'save').mockImplementation(async () => userDto);
 
         expect(await service.create(userDto)).toStrictEqual(result);
     });
