@@ -8,6 +8,9 @@ export class User {
     @Column('varchar', { length: 100, nullable: false })
     name: string;
 
+    @Column('varchar', { nullable: false })
+    role: string;
+
     @Column('varchar', { length: 100, nullable: false })
     password: string;
 }

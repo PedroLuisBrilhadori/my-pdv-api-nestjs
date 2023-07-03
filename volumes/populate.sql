@@ -3,8 +3,11 @@
 
 -- users
 
-INSERT INTO "DD_USERS" ("name", "email", "password") 
-VALUES ('Pedro Luís Brilhadori', 'pedroluisbrilhadori@gmail.com', '$2b$10$.ckTU3e0PnFpKHNY3x2Ip.OKsCpzpj3WkWU3oa8WTmNcevavBrnEG');
+INSERT INTO "DD_USERS" ("name", "role", "email", "password") 
+VALUES ('Pedro Luís Brilhadori', 'admin' , 'pedroluisbrilhadori@gmail.com', '$2b$10$.ckTU3e0PnFpKHNY3x2Ip.OKsCpzpj3WkWU3oa8WTmNcevavBrnEG');
+
+INSERT INTO "DD_USERS" ("name", "role", "email", "password") 
+VALUES ('Usuário Teste', 'user' , 'user@gmail.com', '$2b$10$.ckTU3e0PnFpKHNY3x2Ip.OKsCpzpj3WkWU3oa8WTmNcevavBrnEG');
  
 
 -- products

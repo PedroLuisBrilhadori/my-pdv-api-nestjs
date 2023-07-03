@@ -23,7 +23,9 @@ export class UserService {
     ) {}
 
     async findOne(email: string) {
+        console.log(email);
         const user = await this.repository.findOne({ where: { email } });
+        console.log(user);
 
         if (!user) throw new NotFoundException('Usuário não encontrado.');
 

@@ -14,11 +14,12 @@ export class AuthService {
         return await this.userService.findPassword(email, password);
     }
 
-    async login(loginUser: LoginUserDto) {
-        const payload = { email: loginUser.email };
+    async login({ email }: LoginUserDto) {
         const {
             user: { password, ...user },
-        } = await this.userService.findOne(loginUser.email);
+        } = await this.userService.findOne(email);
+
+        const payload = { email: user.email, role: user.role };
         return {
             user,
             token: this.jwtService.sign(payload),
