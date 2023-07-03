@@ -1,5 +1,7 @@
+import { Transform } from 'class-transformer';
 import {
     IsEmail,
+    IsEnum,
     IsNotEmpty,
     IsString,
     Length,
@@ -8,6 +10,7 @@ import {
     Min,
     MinLength,
 } from 'class-validator';
+import { Role } from 'src/modules/Auth';
 
 export class CreateUserDto {
     @IsString()
@@ -20,6 +23,12 @@ export class CreateUserDto {
     @IsEmail()
     @MaxLength(150)
     email: string;
+
+    @IsEnum(Role)
+    @Transform(({ value }) => {
+        return Role[value];
+    })
+    role: string;
 
     @IsString()
     @MinLength(6)

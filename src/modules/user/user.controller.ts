@@ -2,13 +2,15 @@ import { Body, Controller, Get, Post, UseGuards, Param } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/user.dto';
 import { JwtAuthGuard } from '../Auth/guards/jwt-auth.guard';
+import { Role, Roles } from '../Auth';
 
 @Controller('user')
 export class UserController {
     constructor(private userService: UserService) {}
 
-    @Post('create')
+    @Post('')
     @UseGuards(JwtAuthGuard)
+    @Roles(Role.Admin)
     async register(@Body() createUser: CreateUserDto) {
         const {
             user: { password, ...user },
