@@ -21,14 +21,11 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
         const request = context.switchToHttp().getRequest();
 
-        const token = request['headers']['authorization'].replace(
-            'Bearer ',
-            '',
-        );
+        const token = request['headers']['authorization'];
 
         if (!token) return false;
 
-        const user = this.jwtService.decode(token) as {
+        const user = this.jwtService.decode(token.replace('Bearer ', '')) as {
             role: string;
             email: string;
         };

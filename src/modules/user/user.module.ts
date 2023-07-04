@@ -13,9 +13,11 @@ import {
     FindUserService,
     FindOneUserService,
     UpdateUserService,
+    DeleteUserService,
 } from './services';
 import {
     CreateUserController,
+    DeleteUserController,
     FindOneUserController,
     FindUserController,
     UpdateUserController,
@@ -27,6 +29,7 @@ import {
         FindUserController,
         FindOneUserController,
         UpdateUserController,
+        DeleteUserController,
     ],
     imports: [TypeOrmModule.forFeature([User])],
     providers: [
@@ -37,6 +40,7 @@ import {
         FindOneUserService,
         FindUserPasswordService,
         UpdateUserService,
+        DeleteUserService,
         ...GetDatabaseProviders(User),
         JwtService,
     ],
