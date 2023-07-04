@@ -8,7 +8,7 @@ on:
 
 jobs:
     test:
-        runs-on: [arch-selfhost, ubuntu-latest]
+        runs-on: arch-selfhost
 
         strategy:
             matrix:
