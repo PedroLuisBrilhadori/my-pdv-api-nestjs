@@ -1,23 +1,35 @@
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
-import { IS_PUBLIC_KEY } from '../public-routes/public';
+import { Role } from '../model';
+import { ROLES_KEY } from '../decorators';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-    constructor(private reflector: Reflector) {
+    constructor(private reflector: Reflector, private jwtService: JwtService) {
         super();
     }
+
     canActivate(context: ExecutionContext) {
-        const isPublic = this.reflector.getAllAndOverride<boolean>(
-            IS_PUBLIC_KEY,
+        const requiredRoles = this.reflector.getAllAndOverride<Role[]>(
+            ROLES_KEY,
             [context.getHandler(), context.getClass()],
         );
 
-        if (isPublic) {
-            return true;
-        }
+        if (!requiredRoles) return super.canActivate(context);
 
-        return super.canActivate(context);
+        const request = context.switchToHttp().getRequest();
+
+        const token = request['headers']['authorization'];
+
+        if (!token) return false;
+
+        const user = this.jwtService.decode(token.replace('Bearer ', '')) as {
+            role: string;
+            email: string;
+        };
+
+        return requiredRoles.filter((role) => user.role === role).length > 0;
     }
 }

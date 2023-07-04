@@ -1,17 +1,48 @@
-import { Module } from '@nestjs/common';
-import { UserController } from './user.controller';
-import { UserService } from './user.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './model/user.model';
 import { compare, hash } from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { GetDatabaseProviders } from '@app/common/database';
+
+import { User } from './model/user.model';
+
+import {
+    CreateUserService,
+    FindUserPasswordService,
+    FindUserService,
+    FindOneUserService,
+    UpdateUserService,
+    DeleteUserService,
+} from './services';
+import {
+    CreateUserController,
+    DeleteUserController,
+    FindOneUserController,
+    FindUserController,
+    UpdateUserController,
+} from './controllers';
 
 @Module({
-    controllers: [UserController],
+    controllers: [
+        CreateUserController,
+        FindUserController,
+        FindOneUserController,
+        UpdateUserController,
+        DeleteUserController,
+    ],
     imports: [TypeOrmModule.forFeature([User])],
     providers: [
-        UserService,
+        JwtService,
+        CreateUserService,
+        FindUserService,
+        FindOneUserService,
+        FindUserPasswordService,
+        UpdateUserService,
+        DeleteUserService,
         { provide: 'BCRYPT', useValue: { hash: hash, compare: compare } },
+        ...GetDatabaseProviders(User),
     ],
-    exports: [UserService],
+    exports: [FindOneUserService, FindUserPasswordService],
 })
 export class UserModule {}

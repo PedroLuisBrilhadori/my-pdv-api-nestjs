@@ -14,6 +14,7 @@ import {
     FindProductService,
 } from './services';
 import { Product } from './model/product.model';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
     controllers: [
@@ -28,6 +29,7 @@ import { Product } from './model/product.model';
         FindProductService,
         DeleteProductService,
         ...GetDatabaseProviders(Product),
+        JwtService,
     ],
     imports: [TypeOrmModule.forFeature([Product])],
 })

@@ -1,15 +1,19 @@
-import { NotFoundException } from "@nestjs/common";
-import { Test } from "@nestjs/testing";
-import { getRepositoryToken } from "@nestjs/typeorm";
-import { FindOneOptions, Repository } from "typeorm";
+import { NotFoundException } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 
-import { TableMetadata } from "../../types";
-import { MockFindOneUserService, MockRepository, MockUser, createUser } from "../mocks";
+import { TableMetadata } from '../../types';
+import {
+    MockFindOneUserService,
+    MockRepository,
+    MockUser,
+    createUser,
+} from '../mocks';
 
 const mockuser: MockUser = createUser();
 
 describe('Abstract FindOne Service', () => {
-
     let service: MockFindOneUserService;
     let repository: Repository<MockUser>;
 
@@ -38,14 +42,13 @@ describe('Abstract FindOne Service', () => {
         );
     });
 
-
     it('should find one user', async () => {
         const findOptions: FindOneOptions<MockUser> = {
             where: { name: 'Pedro' },
         };
 
         const result = {
-            mockuser,
+            data: mockuser,
         };
 
         jest.spyOn(repository, 'findOne').mockImplementation(async () => ({
@@ -62,8 +65,8 @@ describe('Abstract FindOne Service', () => {
 
         jest.spyOn(repository, 'findOne').mockImplementation(() => null);
 
-        expect(
-            async () => await service.findOne(findOptions),
-        ).rejects.toThrow(NotFoundException);
+        expect(async () => await service.findOne(findOptions)).rejects.toThrow(
+            NotFoundException,
+        );
     });
 });

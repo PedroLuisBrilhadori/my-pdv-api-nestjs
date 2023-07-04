@@ -12,9 +12,13 @@ export class MockRepository<TEntity> extends Repository<TEntity> {
 }
 
 export class MockQueryBuilder {
-    where = jest.fn();
-    orderBy = jest.fn();
-    addOrderBy = jest.fn();
+    where = jest.fn().mockImplementation(() => this);
+    orderBy = jest.fn().mockImplementation(() => this);
+    addOrderBy = jest.fn().mockImplementation(() => this);
+
+    update = jest.fn().mockImplementation(() => this);
+    set = jest.fn().mockImplementation(() => this);
+    execute = jest.fn().mockImplementation(() => this);
 
     take = jest.fn().mockImplementation(() => this);
     skip = jest.fn().mockImplementation(() => this);

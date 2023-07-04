@@ -10,7 +10,8 @@
     "testEnvironment": "node",
     "roots": ["<rootDir>/src/", "<rootDir>/libs/"],
     "moduleNameMapper": {
-        "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1"
+        "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1",
+        "^@app/modules(|/.*)$": "<rootDir>/src/modules/$1"
     },
     "coveragePathIgnorePatterns": [
         "node_modules",
