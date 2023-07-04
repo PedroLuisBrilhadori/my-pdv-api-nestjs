@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards, Param } from '@nestjs/common';
 import { FindOneUserService } from '../services';
-import { JwtAuthGuard, Role, Roles } from 'src/modules/Auth';
+import { JwtAuthGuard, Role, Roles } from '@app/modules/Auth';
 
 @Controller('user')
 export class FindOneUserController {

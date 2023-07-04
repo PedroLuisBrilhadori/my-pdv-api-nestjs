@@ -34,15 +34,14 @@ import {
     imports: [TypeOrmModule.forFeature([User])],
     providers: [
         JwtService,
-        { provide: 'BCRYPT', useValue: { hash: hash, compare: compare } },
         CreateUserService,
         FindUserService,
         FindOneUserService,
         FindUserPasswordService,
         UpdateUserService,
         DeleteUserService,
+        { provide: 'BCRYPT', useValue: { hash: hash, compare: compare } },
         ...GetDatabaseProviders(User),
-        JwtService,
     ],
     exports: [FindOneUserService, FindUserPasswordService],
 })

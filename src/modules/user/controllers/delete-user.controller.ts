@@ -1,6 +1,6 @@
 import { Controller, UseGuards, Delete, Param } from '@nestjs/common';
 import { DeleteUserService } from '../services';
-import { Role, Roles, JwtAuthGuard } from '../../Auth';
+import { Role, Roles, JwtAuthGuard } from '@app/modules/Auth';
 
 @Controller('user')
 export class DeleteUserController {

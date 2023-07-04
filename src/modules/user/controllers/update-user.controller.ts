@@ -6,7 +6,7 @@ import {
     Patch,
     UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard, Role, Roles } from '../../Auth';
+import { JwtAuthGuard, Role, Roles } from '@app/modules/Auth';
 import { UpdateUserService } from '../services';
 import { UpdateUserDto } from '../dto';
 
