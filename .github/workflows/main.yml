@@ -7,25 +7,8 @@ on:
         branches: [main]
 
 jobs:
-    # Select a self hosted runner if the username matches else fallback
-    # to ubuntu-latest
-    choose-runner:
-        runs-on: ubuntu-latest
-        outputs:
-            runner: ${{ steps.runner.outputs.runner }}
-
-        steps:
-            - id: runner
-              run: |
-                  if [ "${{ github.actor }}" == "ianpurton" ]; then
-                    echo "::set-output name=runner::arch-selfhost"    
-                  else
-                    echo "::set-output name=runner::ubuntu-latest"
-                  fi
     test:
-        needs: choose-runner
-        # will run on self-hosted or github-hosted runner
-        runs-on: ${{ needs.choose-runner.outputs.runner }}
+        runs-on: [arch-selfhost, ubuntu-latest]
 
         strategy:
             matrix:
