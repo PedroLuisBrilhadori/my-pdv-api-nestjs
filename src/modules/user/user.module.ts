@@ -4,23 +4,29 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { GetDatabaseProviders } from '@app/common/database';
+
+import { User } from './model/user.model';
+
 import {
     CreateUserService,
     FindUserPasswordService,
     FindUserService,
     FindOneUserService,
+    UpdateUserService,
 } from './services';
-
-import { User } from './model/user.model';
-import { CreateUserController } from './controllers/create-user.controller';
-import { FindUserController } from './controllers/find-user.controller';
-import { FindOneUserController } from './controllers/find-one-user.controller';
+import {
+    CreateUserController,
+    FindOneUserController,
+    FindUserController,
+    UpdateUserController,
+} from './controllers';
 
 @Module({
     controllers: [
         CreateUserController,
         FindUserController,
         FindOneUserController,
+        UpdateUserController,
     ],
     imports: [TypeOrmModule.forFeature([User])],
     providers: [
@@ -30,6 +36,7 @@ import { FindOneUserController } from './controllers/find-one-user.controller';
         FindUserService,
         FindOneUserService,
         FindUserPasswordService,
+        UpdateUserService,
         ...GetDatabaseProviders(User),
         JwtService,
     ],

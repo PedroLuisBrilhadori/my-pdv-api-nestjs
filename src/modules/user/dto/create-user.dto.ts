@@ -4,13 +4,11 @@ import {
     IsEnum,
     IsNotEmpty,
     IsString,
-    Length,
-    Max,
     MaxLength,
-    Min,
     MinLength,
 } from 'class-validator';
-import { Role } from 'src/modules/Auth';
+
+import { Role } from '../../Auth';
 
 export class CreateUserDto {
     @IsString()

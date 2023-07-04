@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LoginUserDto } from '../user/dto/user.dto';
+import { LoginUserDto } from '../user/dto/create-user.dto';
 import { FindOneUserService, FindUserPasswordService } from '../user/services';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class AuthService {
 
     async login({ email }: LoginUserDto) {
         const {
-            user: { password, ...user },
+            data: { password, ...user },
         } = await this.findOneUserService.findOne({ where: { email } });
 
         const payload = { email: user.email, role: user.role };
