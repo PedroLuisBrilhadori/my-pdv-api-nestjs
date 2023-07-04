@@ -8,7 +8,7 @@ export class FindOneUserController {
 
     @UseGuards(JwtAuthGuard)
     @Get('/:email')
-    @Roles(Role.User)
+    @Roles(Role.User, Role.Admin)
     async execute(@Param() { email }) {
         return this.service.findOne({ where: { email } });
     }

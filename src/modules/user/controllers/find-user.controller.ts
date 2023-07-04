@@ -9,7 +9,7 @@ export class FindUserController {
 
     @UseGuards(JwtAuthGuard)
     @Get('')
-    @Roles(Role.User)
+    @Roles(Role.User, Role.Admin)
     async execute(
         @Query()
         options: FindOptionsDto,
