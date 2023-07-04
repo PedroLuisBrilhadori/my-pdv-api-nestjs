@@ -1,33 +1,48 @@
-name: Node.js CI
+name: Node.js Tests
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
 
 jobs:
-  build:
+    # Select a self hosted runner if the username matches else fallback
+    # to ubuntu-latest
+    choose-runner:
+        runs-on: ubuntu-latest
+        outputs:
+            runner: ${{ steps.runner.outputs.runner }}
 
-    runs-on: ubuntu-latest
+        steps:
+            - id: runner
+              run: |
+                  if [ "${{ github.actor }}" == "ianpurton" ]; then
+                    echo "::set-output name=runner::arch-selfhost"    
+                  else
+                    echo "::set-output name=runner::ubuntu-latest"
+                  fi
+    test:
+        needs: choose-runner
+        # will run on self-hosted or github-hosted runner
+        runs-on: ${{ needs.choose-runner.outputs.runner }}
 
-    strategy:
-      matrix:
-        node-version: [18.x]
+        strategy:
+            matrix:
+                node-version: [18.x]
 
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set Node.js 18.x
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.x
-          cache: 'yarn'
-      - name: Run install
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: install # will run `yarn install` command
-      - name: Test the app
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: test # will run `yarn test` command        
-  
+        steps:
+            - uses: actions/checkout@v3
+            - name: Set Node.js 18.x
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18.x
+                  cache: 'yarn'
+            - name: Run install
+              uses: borales/actions-yarn@v4
+              with:
+                  cmd: install # will run `yarn install` command
+            - name: Test the app
+              uses: borales/actions-yarn@v4
+              with:
+                  cmd: test # will run `yarn test` command
