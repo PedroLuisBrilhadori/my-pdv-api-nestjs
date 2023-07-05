@@ -10,6 +10,7 @@ import { Product } from '..';
 import { UpdateInventoryDto } from '../dto';
 import { FindOneProductService } from './find-one-product.product.service';
 
+export type UpdateInventoryAction = 'decrement' | 'increment';
 @Injectable()
 export class UpdateInventoryService {
     constructor(
@@ -17,20 +18,20 @@ export class UpdateInventoryService {
         private findOneService: FindOneProductService,
     ) {}
 
-    async update(name: string, { quantity, action }: UpdateInventoryDto) {
-        const { data } = await this.findOneService.findOne({ where: { name } });
+    async increment(name: string, { quantity }: UpdateInventoryDto) {
+        return this.update('increment', name, { quantity });
+    }
 
-        if (!data.active)
-            throw new BadRequestException(`Produto: ${name} não está ativado.`);
+    async decrement(name: string, { quantity }: UpdateInventoryDto) {
+        return this.update('decrement', name, { quantity });
+    }
 
-        if (data.inventory <= 0 && action === 'decrement')
-            throw new BadRequestException(`Produto ${name} sem estoque.`);
-
-        if (action == 'increment') {
-            data.inventory = Number(data.inventory) + quantity;
-        } else {
-            data.inventory = Number(data.inventory) - quantity;
-        }
+    private async update(
+        action: UpdateInventoryAction,
+        name: string,
+        { quantity }: UpdateInventoryDto,
+    ) {
+        const data = await this.incrementOrDecrement(action, name, quantity);
 
         try {
             await this.repository.update({ name }, data);
@@ -39,5 +40,27 @@ export class UpdateInventoryService {
         }
 
         return { data };
+    }
+
+    private async incrementOrDecrement(
+        action: UpdateInventoryAction,
+        name: string,
+        quantity: number,
+    ) {
+        const { data } = await this.findOneService.findOne({ where: { name } });
+
+        if (!data.active)
+            throw new BadRequestException(`Produto: ${name} não está ativado.`);
+
+        if (data.inventory <= 0 && action === 'decrement')
+            throw new BadRequestException(`Produto: ${name} não tem estoque.`);
+
+        if (action == 'increment') {
+            data.inventory = Number(data.inventory) + quantity;
+        } else {
+            data.inventory = Number(data.inventory) - quantity;
+        }
+
+        return data;
     }
 }

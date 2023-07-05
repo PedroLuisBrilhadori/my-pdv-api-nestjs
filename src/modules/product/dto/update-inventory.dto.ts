@@ -1,14 +1,6 @@
-import { IsEnum, IsNumber } from 'class-validator';
-
-export enum UpdateInventoryAction {
-    Increment = 'increment',
-    Decrement = 'decrement',
-}
+import { IsNumber } from 'class-validator';
 
 export class UpdateInventoryDto {
     @IsNumber()
     quantity: number;
-
-    @IsEnum(UpdateInventoryAction)
-    action: UpdateInventoryAction;
 }

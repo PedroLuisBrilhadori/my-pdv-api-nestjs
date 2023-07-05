@@ -1,4 +1,5 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard, Role, Roles } from '@app/modules/Auth';
 
 import { UpdateInventoryService } from '../services';
 import { UpdateInventoryDto } from '../dto';
@@ -7,8 +8,17 @@ import { UpdateInventoryDto } from '../dto';
 export class UpdateInventoryController {
     constructor(private service: UpdateInventoryService) {}
 
-    @Post('/:name/inventory')
-    execute(@Param('name') name: string, @Body() dto: UpdateInventoryDto) {
-        return this.service.update(name, dto);
+    @Post('/:name/increment')
+    @UseGuards(JwtAuthGuard)
+    @Roles(Role.Admin)
+    increment(@Param('name') name: string, @Body() dto: UpdateInventoryDto) {
+        return this.service.increment(name, dto);
+    }
+
+    @Post('/:name/decrement')
+    @UseGuards(JwtAuthGuard)
+    @Roles(Role.Admin, Role.User)
+    decrement(@Param('name') name: string, @Body() dto: UpdateInventoryDto) {
+        return this.service.decrement(name, dto);
     }
 }
