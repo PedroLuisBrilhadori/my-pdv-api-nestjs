@@ -15,6 +15,12 @@ export class CreateProductDto {
     @IsNumber()
     price: number;
 
+    @IsNumber()
+    inventory: number;
+
+    @IsBoolean()
+    active: boolean;
+
     @IsBoolean()
     unit: boolean;
 }
