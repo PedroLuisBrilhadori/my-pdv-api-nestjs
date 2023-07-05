@@ -60,7 +60,7 @@ export abstract class AbstractFindService<TEntity> {
     }
 
     private addActiveWhere(active) {
-        if (!active) return;
+        if (active === undefined) return;
 
         this.queryBuilder.where(`${this.tableName}.active = :active`, {
             active,
