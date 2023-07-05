@@ -22,6 +22,8 @@ export abstract class AbstractFindService<TEntity> {
     }
 
     async find({ page, max, search, sort, active }: FindOptionsDto) {
+        this.where = false;
+
         const skip = (page - 1) * max;
 
         if (search && this.searchName) this.addSearch(search, active);
@@ -42,7 +44,6 @@ export abstract class AbstractFindService<TEntity> {
     }
 
     private addSearch(search: string, active: boolean) {
-        console.log(search, active);
         const searchQuery = `LOWER(unaccent(${this.tableName}.${this.searchName})) LIKE LOWER(unaccent(:${this.searchName}))`;
 
         if (active === undefined) return this._search(searchQuery, search);
