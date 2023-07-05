@@ -16,6 +16,12 @@ export class Product {
     })
     unit?: boolean;
 
+    @Column({ nullable: false })
+    active: boolean;
+
+    @Column('numeric', { precision: 5, scale: 2, nullable: false })
+    inventory: number;
+
     @OneToMany(() => Item, (item) => item.product, { eager: false })
     items?: Item[];
 }
