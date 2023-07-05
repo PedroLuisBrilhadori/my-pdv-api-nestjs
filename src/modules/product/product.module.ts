@@ -10,6 +10,7 @@ import {
     FindOneProductController,
     FindProductController,
     UpdateInventoryController,
+    UpdatePriceController,
 } from './controllers';
 
 import {
@@ -18,6 +19,7 @@ import {
     FindOneProductService,
     FindProductService,
     UpdateInventoryService,
+    UpdatePriceService,
 } from './services';
 
 @Module({
@@ -27,6 +29,7 @@ import {
         FindOneProductController,
         DeleteProductController,
         UpdateInventoryController,
+        UpdatePriceController,
     ],
     providers: [
         CreateProductService,
@@ -34,6 +37,7 @@ import {
         FindProductService,
         DeleteProductService,
         UpdateInventoryService,
+        UpdatePriceService,
         ...GetDatabaseProviders(Product),
         JwtService,
     ],
