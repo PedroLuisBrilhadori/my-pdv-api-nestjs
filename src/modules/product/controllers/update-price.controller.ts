@@ -11,7 +11,7 @@ export class UpdatePriceController {
     @Post('/:name/price')
     @UseGuards(JwtAuthGuard)
     @Roles(Role.Admin)
-    increment(@Param('name') name: string, @Body() dto: UpdatePriceDto) {
+    execute(@Param('name') name: string, @Body() dto: UpdatePriceDto) {
         return this.service.update(name, dto);
     }
 }
