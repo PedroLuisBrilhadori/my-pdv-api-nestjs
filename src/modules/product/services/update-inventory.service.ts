@@ -52,8 +52,10 @@ export class UpdateInventoryService {
         if (!data.active)
             throw new BadRequestException(`Produto: ${name} não está ativado.`);
 
-        if (data.inventory <= 0 && action === 'decrement')
-            throw new BadRequestException(`Produto: ${name} não tem estoque.`);
+        if (data.inventory < quantity && action === 'decrement')
+            throw new BadRequestException(
+                `Estoque do produto: ${name} não disponivel`,
+            );
 
         if (action == 'increment') {
             data.inventory = Number(data.inventory) + quantity;
