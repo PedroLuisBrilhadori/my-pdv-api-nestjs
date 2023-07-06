@@ -1,5 +1,6 @@
-import { JwtAuthGuard, Role, Roles } from '@app/modules/Auth';
 import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard, Role, Roles } from '@app/modules/Auth';
+
 import { ToggleActiveProductService } from '../services';
 
 @Controller('products')

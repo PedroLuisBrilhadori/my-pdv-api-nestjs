@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { Product } from '..';
+import { Product } from '../model/product.model';
 import { UpdateInventoryDto } from '../dto';
 import { FindOneProductService } from './find-one-product.product.service';
 

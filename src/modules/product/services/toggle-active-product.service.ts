@@ -1,7 +1,8 @@
+import { Repository } from 'typeorm';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from '..';
-import { Repository } from 'typeorm';
+
+import { Product } from '../model/product.model';
 import { FindOneProductService } from './find-one-product.product.service';
 
 @Injectable()

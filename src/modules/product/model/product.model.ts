@@ -1,6 +1,6 @@
-import { Searchable } from '@app/common';
-import { Item } from 'src/modules/cart/model/item.model';
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Searchable } from '@app/common';
+import { Item } from '@app/modules/cart/model/item.model';
 
 @Entity('PDV_PRODUCTS')
 @Searchable('name')
