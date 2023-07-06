@@ -6,7 +6,7 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Product } from '../../product';
-import { Cart } from './cart.model';
+import { Purchase } from './purchase.model';
 
 @Entity('PDV_ITEMS')
 export class Item {
@@ -28,9 +28,9 @@ export class Item {
     @ManyToOne(() => Product, (product) => product.items)
     product?: Product;
 
-    @ManyToOne(() => Cart, (cart) => cart.items, {
+    @ManyToOne(() => Purchase, (purchase) => purchase.items, {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
     })
-    cart?: Cart;
+    purchase?: Purchase;
 }
