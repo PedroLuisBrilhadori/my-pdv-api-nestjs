@@ -19,11 +19,13 @@ export class Item {
     @Column('numeric', { precision: 5, scale: 2, nullable: false })
     amount: number;
 
-    @ManyToOne(() => Product, (product) => product.items, {
-        eager: true,
-        onDelete: 'NO ACTION',
-        onUpdate: 'NO ACTION',
-    })
+    @Column('varchar', { length: 100, nullable: false })
+    productName: string;
+
+    @Column('numeric', { precision: 5, scale: 2, nullable: false })
+    paidValue: number;
+
+    @ManyToOne(() => Product, (product) => product.items)
     product?: Product;
 
     @ManyToOne(() => Cart, (cart) => cart.items, {

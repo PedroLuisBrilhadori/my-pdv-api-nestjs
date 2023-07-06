@@ -46,5 +46,6 @@ import {
         JwtService,
     ],
     imports: [TypeOrmModule.forFeature([Product])],
+    exports: [TypeOrmModule],
 })
 export class ProductModule {}
