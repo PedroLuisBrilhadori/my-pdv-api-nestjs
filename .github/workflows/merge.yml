@@ -1,8 +1,6 @@
-name: Node.js Tests
+name: Pull Request CI
 
 on:
-    push:
-        branches: [main, feature/*]
     pull_request:
         branches: [main]
 
@@ -22,5 +20,8 @@ jobs:
             - name: Install dependencies
               run: yarn install
 
-            - name: Run tests
+            - name: Run Tests
               run: yarn test
+
+            - name: Build app
+              run: yarn build
