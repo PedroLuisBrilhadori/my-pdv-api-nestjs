@@ -9,6 +9,7 @@ import {
     DeleteProductController,
     FindOneProductController,
     FindProductController,
+    ToggleActiveController,
     UpdateInventoryController,
     UpdatePriceController,
 } from './controllers';
@@ -18,6 +19,7 @@ import {
     DeleteProductService,
     FindOneProductService,
     FindProductService,
+    ToggleActiveProductService,
     UpdateInventoryService,
     UpdatePriceService,
 } from './services';
@@ -30,6 +32,7 @@ import {
         DeleteProductController,
         UpdateInventoryController,
         UpdatePriceController,
+        ToggleActiveController,
     ],
     providers: [
         CreateProductService,
@@ -38,6 +41,7 @@ import {
         DeleteProductService,
         UpdateInventoryService,
         UpdatePriceService,
+        ToggleActiveProductService,
         ...GetDatabaseProviders(Product),
         JwtService,
     ],
