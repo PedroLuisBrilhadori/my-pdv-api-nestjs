@@ -1,7 +1,8 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { CreateProductService } from '../services';
+import { JwtAuthGuard, Roles, Role } from '@app/modules/Auth';
+
 import { CreateProductDto } from '../dto/product.dto';
-import { JwtAuthGuard, Roles, Role } from '../../Auth';
+import { CreateProductService } from '../services';
 
 @Controller('products')
 export class CreateProductController {

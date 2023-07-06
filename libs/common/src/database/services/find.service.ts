@@ -9,6 +9,8 @@ export abstract class AbstractFindService<TEntity> {
     tableName: string;
     searchName: string;
 
+    private where: boolean = false;
+
     constructor(
         private queryBuilder: SelectQueryBuilder<TEntity>,
         private queryRunner: QueryRunner,
@@ -19,15 +21,19 @@ export abstract class AbstractFindService<TEntity> {
         this.searchName = metadata.searchName;
     }
 
-    async find({ page, max, search, sort }: FindOptionsDto) {
+    async find({ page, max, search, sort, active }: FindOptionsDto) {
+        this.where = false;
+
         const skip = (page - 1) * max;
 
-        if (search && this.searchName) this.addSearch(search);
+        if (search && this.searchName) this.addSearch(search, active);
 
         if (sort) {
             if (!isArray(sort)) sort = [sort];
             await this.addOrders(sort);
         }
+
+        if (!this.where) this.addActiveWhere(active);
 
         const [data, total] = await this.queryBuilder
             .take(max)
@@ -37,13 +43,34 @@ export abstract class AbstractFindService<TEntity> {
         return { data, total, page };
     }
 
-    private addSearch(search: string) {
+    private addSearch(search: string, active: boolean) {
+        const searchQuery = `LOWER(unaccent(${this.tableName}.${this.searchName})) LIKE LOWER(unaccent(:${this.searchName}))`;
+
+        if (active === undefined) return this._search(searchQuery, search);
+
+        this.where = true;
+
         this.queryBuilder.where(
-            `LOWER(unaccent(${this.tableName}.${this.searchName})) LIKE LOWER(unaccent(:${this.searchName}))`,
+            `${searchQuery} AND ${this.tableName}.active = :active`,
             {
                 [this.searchName]: `%${search}%`,
+                active,
             },
         );
+    }
+
+    private addActiveWhere(active) {
+        if (active === undefined) return;
+
+        this.queryBuilder.where(`${this.tableName}.active = :active`, {
+            active,
+        });
+    }
+
+    private _search(searchQuery, search: string) {
+        this.queryBuilder.where(searchQuery, {
+            [this.searchName]: `%${search}%`,
+        });
     }
 
     private async addOrders(sorts: SortParam[]) {

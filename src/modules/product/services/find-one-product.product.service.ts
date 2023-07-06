@@ -1,7 +1,8 @@
+import { Repository } from 'typeorm';
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { AbstractFindOneService, TableMetadata } from '@app/common';
+
 import { Product } from '../model/product.model';
 
 @Injectable()
