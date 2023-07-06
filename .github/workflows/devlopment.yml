@@ -1,0 +1,24 @@
+name: Development Tests
+
+on:
+    push:
+        branches: [feature/*, hotfix/*, release/*]
+
+jobs:
+    test:
+        runs-on: self-hosted
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Use Node.js
+              uses: actions/setup-node@v2
+              with:
+                  node-version: 18.x
+
+            - name: Install dependencies
+              run: yarn install
+
+            - name: Run tests
+              run: yarn test
