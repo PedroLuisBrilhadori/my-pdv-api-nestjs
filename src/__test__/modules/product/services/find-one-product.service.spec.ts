@@ -1,5 +1,4 @@
 import { compare, hash } from 'bcrypt';
-import { faker } from '@faker-js/faker';
 import { JwtService } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
 import { Repository } from 'typeorm';
@@ -7,9 +6,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { MockRepository } from '@app/common/database/__test__/mocks';
 import { TableMetadata } from '@app/common/database';
 
-import { FindOneProductService } from '@app/modules/product/services';
-
-import { Product } from '@app/modules/product';
+import { FindOneProductService, Product } from '@app/modules/product';
 
 import { makeProduct } from '../mocks';
 

@@ -3,8 +3,10 @@ import { Test } from '@nestjs/testing';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 
-import { DeleteProductController } from '@app/modules/product/controllers';
-import { DeleteProductService } from '@app/modules/product/services';
+import {
+    DeleteProductController,
+    DeleteProductService,
+} from '@app/modules/product';
 
 import { makeProduct } from '../mocks';
 

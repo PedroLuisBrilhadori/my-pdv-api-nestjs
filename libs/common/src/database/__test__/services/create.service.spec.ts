@@ -57,7 +57,7 @@ describe('Abstract Create service', () => {
         const userDto: MockCreateUserDto = mockuser;
 
         const result = {
-            mockuser,
+            data: mockuser,
         };
 
         jest.spyOn(repository, 'create').mockImplementation(() => userDto);

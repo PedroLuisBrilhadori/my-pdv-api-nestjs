@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AbstractCreateService, TableMetadata } from '@app/common';
+import { AbstractCreateService } from '@app/common';
 import { User } from '../model/user.model';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { Bcrypt } from '../types';
@@ -10,10 +10,9 @@ import { Bcrypt } from '../types';
 export class CreateUserService extends AbstractCreateService<User> {
     constructor(
         @InjectRepository(User) repository: Repository<User>,
-        @Inject(TableMetadata.name) tableMetadata: TableMetadata,
         @Inject('BCRYPT') private bcrypt: Bcrypt,
     ) {
-        super(repository, tableMetadata);
+        super(repository);
     }
 
     async createUser(dto: CreateUserDto) {

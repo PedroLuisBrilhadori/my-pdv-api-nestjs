@@ -2,8 +2,11 @@ import { Test } from '@nestjs/testing';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 
-import { ToggleActiveController } from '@app/modules/product/controllers';
-import { ToggleActiveProductService } from '@app/modules/product/services';
+import {
+    ToggleActiveController,
+    ToggleActiveProductService,
+} from '@app/modules/product/';
+
 import { makeProduct } from '../mocks';
 
 describe('ToggleActiveController', () => {

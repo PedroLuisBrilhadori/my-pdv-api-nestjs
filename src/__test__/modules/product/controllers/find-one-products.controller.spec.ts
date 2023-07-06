@@ -2,8 +2,11 @@ import { Test } from '@nestjs/testing';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 
-import { FindOneProductController } from '@app/modules/product/controllers';
-import { FindOneProductService } from '@app/modules/product/services';
+import {
+    FindOneProductController,
+    FindOneProductService,
+} from '@app/modules/product';
+
 import { makeProduct } from '../mocks';
 
 describe('FindOneProductController', () => {

@@ -1,2 +1,4 @@
-export * from './model/product.model';
+export * from './model';
+export * from './controllers';
+export * from './services';
 export * from './product.module';

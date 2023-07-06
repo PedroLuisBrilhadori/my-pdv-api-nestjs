@@ -3,8 +3,11 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { FindOptionsDto } from '@app/common/database';
 
-import { FindProductController } from '@app/modules/product/controllers';
-import { FindProductService } from '@app/modules/product/services';
+import {
+    FindProductController,
+    FindProductService,
+} from '@app/modules/product/';
+
 import { makeProduct } from '../mocks';
 
 describe('FindProductController', () => {

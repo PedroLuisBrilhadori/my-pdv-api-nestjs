@@ -2,8 +2,11 @@ import { Test } from '@nestjs/testing';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 
-import { CreateProductController } from '@app/modules/product/controllers';
-import { CreateProductService } from '@app/modules/product/services';
+import {
+    CreateProductController,
+    CreateProductService,
+} from '@app/modules/product';
+
 import { makeProduct } from '../mocks';
 
 describe('CreateProductController', () => {
