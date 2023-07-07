@@ -3,7 +3,6 @@ import { QueryRunner, SelectQueryBuilder } from 'typeorm';
 import { isArray } from 'class-validator';
 import { SortParam, TableMetadata } from '../types';
 import { FindOptionsDto } from '../dto';
-import { Item } from '@app/modules/purchase';
 
 export abstract class AbstractFindService<TEntity> {
     name: string;
