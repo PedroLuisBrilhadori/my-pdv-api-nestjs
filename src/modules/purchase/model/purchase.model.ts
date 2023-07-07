@@ -23,6 +23,7 @@ export class Purchase {
     @OneToMany(() => Item, (item) => item.purchase, {
         cascade: true,
         eager: true,
+        onDelete: 'CASCADE',
     })
     @JoinTable()
     items: Item[];

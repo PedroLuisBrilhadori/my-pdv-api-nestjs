@@ -32,7 +32,6 @@ export class Item {
 
     @ManyToOne(() => Purchase, (purchase) => purchase.items, {
         onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
     })
     purchase?: Purchase;
 }
