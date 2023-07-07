@@ -20,7 +20,8 @@
         "paths": {
             "@app/common": ["libs/common/src/"],
             "@app/common/*": ["libs/common/src/*"],
-            "@app/modules/*": ["src/modules/*"]
+            "@app/modules/*": ["src/modules/*"],
+            "@app/decorators": ["src/decorators/"]
         }
     }
 }

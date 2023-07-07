@@ -6,9 +6,11 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Item } from './item.model';
+import { Searchable } from '@app/common/database';
 
-@Entity('PDV_CARTS')
-export class Cart {
+@Entity('PDV_PURCHASES')
+@Searchable('name')
+export class Purchase {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -18,7 +20,7 @@ export class Cart {
     @Column('varchar', { nullable: true, length: '40' })
     clientName?: string;
 
-    @OneToMany(() => Item, (item) => item.cart, { cascade: true })
+    @OneToMany(() => Item, (item) => item.purchase)
     @JoinTable()
     items: Item[];
 }

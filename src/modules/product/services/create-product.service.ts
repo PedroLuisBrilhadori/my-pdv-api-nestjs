@@ -1,16 +1,13 @@
 import { Repository } from 'typeorm';
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AbstractCreateService, TableMetadata } from '@app/common';
+import { AbstractCreateService } from '@app/common';
 
 import { Product } from '../model/product.model';
 
 @Injectable()
 export class CreateProductService extends AbstractCreateService<Product> {
-    constructor(
-        @InjectRepository(Product) repository: Repository<Product>,
-        @Inject(TableMetadata.name) tableMetadata: TableMetadata,
-    ) {
-        super(repository, tableMetadata);
+    constructor(@InjectRepository(Product) repository: Repository<Product>) {
+        super(repository);
     }
 }

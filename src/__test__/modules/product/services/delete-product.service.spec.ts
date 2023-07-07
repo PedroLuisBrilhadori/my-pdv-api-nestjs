@@ -5,11 +5,9 @@ import { DeleteResult, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { MockRepository } from '@app/common/database/__test__/mocks';
 import { Criteria, TableMetadata } from '@app/common/database';
-
-import { DeleteProductService } from '@app/modules/product/services';
-import { Product } from '@app/modules/product';
-
 import { faker } from '@faker-js/faker';
+
+import { DeleteProductService, Product } from '@app/modules/product/';
 
 describe('DeleteProductService', () => {
     let service: DeleteProductService;

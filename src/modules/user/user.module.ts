@@ -43,6 +43,6 @@ import {
         { provide: 'BCRYPT', useValue: { hash: hash, compare: compare } },
         ...GetDatabaseProviders(User),
     ],
-    exports: [FindOneUserService, FindUserPasswordService],
+    exports: [FindOneUserService, FindUserPasswordService, TypeOrmModule],
 })
 export class UserModule {}

@@ -12,8 +12,7 @@ import {
     TableMetadata,
 } from '@app/common/database';
 
-import { FindProductService } from '@app/modules/product/services';
-import { Product } from '@app/modules/product';
+import { FindProductService, Product } from '@app/modules/product';
 
 import { makeProduct } from '../mocks';
 

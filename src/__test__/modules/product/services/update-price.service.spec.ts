@@ -8,9 +8,9 @@ import { MockRepository } from '@app/common/database/__test__/mocks';
 import {
     FindOneProductService,
     UpdatePriceService,
-} from '@app/modules/product/services';
+    Product,
+} from '@app/modules/product/';
 
-import { Product } from '@app/modules/product';
 import { makeProduct } from '../mocks';
 
 describe('UpdatePriceService', () => {

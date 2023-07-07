@@ -35,6 +35,8 @@ import {
         ToggleActiveController,
     ],
     providers: [
+        ...GetDatabaseProviders(Product),
+        JwtService,
         CreateProductService,
         FindOneProductService,
         FindProductService,
@@ -42,9 +44,8 @@ import {
         UpdateInventoryService,
         UpdatePriceService,
         ToggleActiveProductService,
-        ...GetDatabaseProviders(Product),
-        JwtService,
     ],
     imports: [TypeOrmModule.forFeature([Product])],
+    exports: [TypeOrmModule],
 })
 export class ProductModule {}

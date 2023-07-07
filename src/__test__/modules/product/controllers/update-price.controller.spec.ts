@@ -2,8 +2,11 @@ import { Test } from '@nestjs/testing';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 
-import { UpdatePriceController } from '@app/modules/product/controllers';
-import { UpdatePriceService } from '@app/modules/product/services';
+import {
+    UpdatePriceController,
+    UpdatePriceService,
+} from '@app/modules/product';
+
 import { makeProduct } from '../mocks';
 
 describe('UpdatePriceController', () => {

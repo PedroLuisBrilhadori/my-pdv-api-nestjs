@@ -6,8 +6,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { MockRepository } from '@app/common/database/__test__/mocks';
 import { TableMetadata } from '@app/common/database';
 
-import { CreateProductService } from '@app/modules/product/services';
-import { Product } from '@app/modules/product/model/product.model';
+import { CreateProductService, Product } from '@app/modules/product/';
 
 import { makeProduct } from '../mocks';
 
@@ -54,7 +53,7 @@ describe('CreateProductService', () => {
         const dto: Product = mockProduct;
 
         const result = {
-            user: mockProduct,
+            data: mockProduct,
         };
 
         jest.spyOn(repository, 'create').mockImplementation(() => dto);
