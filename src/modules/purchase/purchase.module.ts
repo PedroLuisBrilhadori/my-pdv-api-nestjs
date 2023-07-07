@@ -2,18 +2,22 @@ import { JwtService } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Product, ProductModule } from '@app/modules/product';
+import { ProductModule } from '@app/modules/product';
 import { Purchase, Item } from './model';
-import { CreatePurchaseController } from './controllers';
+import {
+    CreatePurchaseController,
+    FindPurchaseController,
+} from './controllers';
 import { IsProductActiveContraint } from 'src/decorators';
-import { CreatePurchaseService } from './services';
+import { CreatePurchaseService, FindPurchaseService } from './services';
 import { GetDatabaseProviders } from '@app/common/database';
 
 @Module({
-    controllers: [CreatePurchaseController],
+    controllers: [CreatePurchaseController, FindPurchaseController],
     providers: [
         CreatePurchaseService,
-        ...GetDatabaseProviders(Product),
+        ...GetDatabaseProviders(Purchase),
+        FindPurchaseService,
         JwtService,
         IsProductActiveContraint,
     ],
