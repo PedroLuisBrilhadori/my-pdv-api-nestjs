@@ -6,16 +6,26 @@ import { ProductModule } from '@app/modules/product';
 import { Purchase, Item } from './model';
 import {
     CreatePurchaseController,
+    FindOnePurchaseController,
     FindPurchaseController,
 } from './controllers';
 import { IsProductActiveContraint } from 'src/decorators';
-import { CreatePurchaseService, FindPurchaseService } from './services';
+import {
+    CreatePurchaseService,
+    FindOnePurchaseService,
+    FindPurchaseService,
+} from './services';
 import { GetDatabaseProviders } from '@app/common/database';
 
 @Module({
-    controllers: [CreatePurchaseController, FindPurchaseController],
+    controllers: [
+        CreatePurchaseController,
+        FindPurchaseController,
+        FindOnePurchaseController,
+    ],
     providers: [
         CreatePurchaseService,
+        FindOnePurchaseService,
         ...GetDatabaseProviders(Purchase),
         FindPurchaseService,
         JwtService,

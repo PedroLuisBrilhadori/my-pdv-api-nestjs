@@ -27,7 +27,6 @@ export class CreatePurchaseService extends AbstractCreateService<Purchase> {
         data.items = await this.createItems(items, data.id);
 
         await this.itemRepository.save(data.items);
-        // await this.purchaseRepository.update(data.id, data);
 
         return { data };
     }
