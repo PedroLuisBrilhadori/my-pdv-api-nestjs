@@ -12,10 +12,11 @@ export class FindPurchaseService {
 
     async find({ search, page, max, sort }: FindOptionsDto) {
         const skip = (page - 1) * max;
-        const total = this.repository.count();
 
-        const data = await this.repository.find({
-            where: { name: Like(`%${search}%`) },
+        const where = search ? { name: Like(`%${search}%`) } : null;
+
+        const data = await this.repository.findAndCount({
+            where,
             take: max,
             skip,
             relations: {
@@ -24,8 +25,8 @@ export class FindPurchaseService {
         });
 
         return {
-            data,
-            total,
+            data: data[0],
+            total: data.length,
             page,
         };
     }
