@@ -9,6 +9,7 @@ import {
     DeletePurchaseController,
     FindOnePurchaseController,
     FindPurchaseController,
+    UpdatePurchaseItemsController,
 } from './controllers';
 import { IsProductActiveContraint } from 'src/decorators';
 import {
@@ -16,6 +17,7 @@ import {
     DeletePurchaseSerivce,
     FindOnePurchaseService,
     FindPurchaseService,
+    UpdatePurchaseItemService,
 } from './services';
 import { GetDatabaseProviders } from '@app/common/database';
 
@@ -25,11 +27,13 @@ import { GetDatabaseProviders } from '@app/common/database';
         FindPurchaseController,
         FindOnePurchaseController,
         DeletePurchaseController,
+        UpdatePurchaseItemsController,
     ],
     providers: [
         CreatePurchaseService,
         FindOnePurchaseService,
         DeletePurchaseSerivce,
+        UpdatePurchaseItemService,
         ...GetDatabaseProviders(Purchase),
         FindPurchaseService,
         JwtService,

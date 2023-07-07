@@ -30,8 +30,6 @@ export class Item {
     @ManyToOne(() => Product, { eager: true })
     product?: Product;
 
-    @ManyToOne(() => Purchase, (purchase) => purchase.items, {
-        onDelete: 'CASCADE',
-    })
+    @ManyToOne(() => Purchase, (purchase) => purchase.items, { cascade: true })
     purchase?: Purchase;
 }

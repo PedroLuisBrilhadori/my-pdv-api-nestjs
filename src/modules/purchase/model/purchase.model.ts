@@ -20,11 +20,7 @@ export class Purchase {
     @Column('varchar', { nullable: true, length: '40' })
     clientName?: string;
 
-    @OneToMany(() => Item, (item) => item.purchase, {
-        cascade: true,
-        eager: true,
-        onDelete: 'CASCADE',
-    })
+    @OneToMany(() => Item, (item) => item.purchase)
     @JoinTable()
     items: Item[];
 }
