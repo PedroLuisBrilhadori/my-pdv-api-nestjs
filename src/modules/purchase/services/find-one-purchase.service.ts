@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Purchase } from '../model';
 import { FindOneOptions, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,8 +10,16 @@ export class FindOnePurchaseService {
     ) {}
 
     async findOne(findOptions: FindOneOptions<Purchase>) {
-        return this.repository.findOne({
+        const data = await this.repository.findOne({
             ...findOptions,
         });
+
+        if (!data)
+            throw new NotFoundException(
+                findOptions.where['id'],
+                'the purchase does exits.',
+            );
+
+        return data;
     }
 }
