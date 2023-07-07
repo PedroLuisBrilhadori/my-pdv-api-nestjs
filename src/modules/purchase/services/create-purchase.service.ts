@@ -1,8 +1,8 @@
-import { AbstractCreateService, TableMetadata } from '@app/common/database';
-import { Inject, Injectable } from '@nestjs/common';
+import { AbstractCreateService } from '@app/common/database';
+import { Injectable } from '@nestjs/common';
 import { Item, Purchase } from '../model';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeepPartial, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreatePurchaseDto, CreatePurchaseItemDto } from '../dto';
 import { Product } from '@app/modules/product';
 
@@ -21,7 +21,7 @@ export class CreatePurchaseService extends AbstractCreateService<Purchase> {
         this.purchaseRepository = repository;
     }
 
-    async createPurchase({ name, clientName, items }: CreatePurchaseDto) {
+    async crate({ name, clientName, items }: CreatePurchaseDto) {
         const { data } = await super.create({ name, clientName });
 
         data.items = await this.createItems(items, data.id);

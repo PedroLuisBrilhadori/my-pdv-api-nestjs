@@ -11,6 +11,6 @@ export class CreatePurchaseController {
     @UseGuards(JwtAuthGuard)
     @Roles(Role.Admin, Role.User)
     execute(@Body() dto: CreatePurchaseDto) {
-        return this.service.createPurchase(dto);
+        return this.service.create(dto);
     }
 }
