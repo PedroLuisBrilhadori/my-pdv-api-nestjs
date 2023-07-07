@@ -26,7 +26,7 @@ export class FindPurchaseService {
 
         return {
             data: data[0],
-            total: data.length,
+            total: data[1],
             page,
         };
     }
