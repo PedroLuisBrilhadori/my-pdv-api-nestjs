@@ -16,7 +16,7 @@ export class FindUserPasswordService {
             where: { email },
         });
 
-        if (!this.bcrypt.compare(password, data.password)) {
+        if (!(await this.bcrypt.compare(password, data?.password))) {
             throw new UnauthorizedException();
         }
 
